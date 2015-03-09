@@ -2,49 +2,52 @@
 class MDBase extends PDO {
 
 
-    private static $engine = 'mysql';
+    private $engine = 'mysql';
 
-    // OVH
-    /*private static $dbName = 'laplateftifne13' ;
-    private static $dbHost = 'laplateftifne13.mysql.db' ;
-    private static $dbUsername = 'laplateftifne13';
-    private static $dbUserPassword = 'natureC13';
-    private static $cont  = null;
-
-    /**/
     // LOCAL
-    private static $dbName = 'FNESITE' ;
-    private static $dbHost = 'localhost' ;
-    private static $dbUsername = 'root';
-    private static $dbUserPassword = '';
-    private static $cont  = null;
+    private $dbName = 'Slave' ;
+    private $dbHost = 'localhost' ;
+    private $dbUsername;
+    private $dbUserPassword;
+    private $cont  = null;
 //*/
-    public function __construct(){
-        $dns = self::$engine.':dbname='.self::$dbName.";host=".self::$dbHost;
-        parent::__construct( $dns, self::$dbUsername, self::$dbUserPassword );
+    public function __construct($user, $pass){
+        $dns = $this->engine.':dbname='.$this->dbName.";host=".$this->dbHost;
+        $this->dbUsername=$user;
+        $this->dbUserPassword= $pass;
+        try{
+          parent::__construct( $dns, $this->dbUsername, $this->dbUserPassword );
+        }
+        catch(PDOException $e){
+          die($e->getMessage());
+          header("Location: ../index.php?Error=1");
+        }
     }
 
-    public static function connect()
+    public function connect()
     {
         // One connection through whole application
-        if ( null == self::$cont )
+        if ( null == $this->cont )
         {
             try
             {
-                self::$cont =  new PDO( "mysql:host=".self::$dbHost.";"."dbname=".self::$dbName, self::$dbUsername, self::$dbUserPassword);
+              $this->cont =  new PDO( "mysql:host=".$this->dbHost.";"."dbname=".$this->dbName, $this->dbUsername, $this->dbUserPassword);
             }
             catch(PDOException $e)
             {
                 die($e->getMessage());
+                header("Location: ../index.php?Error=1");
             }
         }
-        return self::$cont;
+        $_SESSION['USER']=$this->dbUsername;
+        $_SESSION['PASS']=$this->dbUserPassword;
+        return $this->cont;
     }
 
 
-    public static function getAllPlayers()
+    public function getAllPlayers()
     {
-        $pdo = self::connect();
+        $pdo = $this->connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $query = "SELECT * FROM PLAYER";
         $qq = $pdo->prepare($query);
@@ -53,9 +56,9 @@ class MDBase extends PDO {
         return $data;
     }
 
-    public static function getAllItems()
+    public function getAllItems()
     {
-        $pdo = self::connect();
+        $pdo = $this->connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $query = "SELECT * FROM ITEM";
         $qq = $pdo->prepare($query);
@@ -64,9 +67,9 @@ class MDBase extends PDO {
         return $data;
     }
 
-    public static function getAllItem_families()
+    public function getAllItem_families()
     {
-        $pdo = self::connect();
+        $pdo = $this->connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $query = "SELECT * FROM ITEM_FAMILY";
         $qq = $pdo->prepare($query);
@@ -75,9 +78,9 @@ class MDBase extends PDO {
         return $data;
     }
 
-    public static function getAllFighters()
+    public function getAllFighters()
     {
-        $pdo = self::connect();
+        $pdo = $this->connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $query = "SELECT * FROM FIGHTER";
         $qq = $pdo->prepare($query);
@@ -86,9 +89,9 @@ class MDBase extends PDO {
         return $data;
     }
 
-    public static function getAllFacilities()
+    public function getAllFacilities()
     {
-        $pdo = self::connect();
+        $pdo = $this->connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $query = "SELECT * FROM FACILITY";
         $qq = $pdo->prepare($query);
@@ -97,9 +100,9 @@ class MDBase extends PDO {
         return $data;
     }
 
-    public static function getAllFacilities_families()
+    public function getAllFacilities_families()
     {
-        $pdo = self::connect();
+        $pdo = $this->connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $query = "SELECT * FROM FACILITYFAMILY";
         $qq = $pdo->prepare($query);
@@ -108,9 +111,9 @@ class MDBase extends PDO {
         return $data;
     }
 
-    public static function getAllCenters()
+    public function getAllCenters()
     {
-        $pdo = self::connect();
+        $pdo = $this->connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $query = "SELECT * FROM CENTER";
         $qq = $pdo->prepare($query);
@@ -119,9 +122,9 @@ class MDBase extends PDO {
         return $data;
     }
 
-    public static function getAllClubs()
+    public function getAllClubs()
     {
-        $pdo = self::connect();
+        $pdo = $this->connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $query = "SELECT * FROM CLUB";
         $qq = $pdo->prepare($query);
@@ -130,9 +133,9 @@ class MDBase extends PDO {
         return $data;
     }
 
-    public static function getAllCompetitions()
+    public function getAllCompetitions()
     {
-        $pdo = self::connect();
+        $pdo = $this->connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $query = "SELECT * FROM COMPETITION";
         $qq = $pdo->prepare($query);
@@ -141,9 +144,9 @@ class MDBase extends PDO {
         return $data;
     }
 
-    public static function getAllNewspapers()
+    public function getAllNewspapers()
     {
-        $pdo = self::connect();
+        $pdo = $this->connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $query = "SELECT * FROM NEWSPAPER";
         $qq = $pdo->prepare($query);
@@ -152,9 +155,9 @@ class MDBase extends PDO {
         return $data;
     }
 
-    public static function getAllRaces()
+    public function getAllRaces()
     {
-        $pdo = self::connect();
+        $pdo = $this->connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $query = "SELECT * FROM RACE";
         $qq = $pdo->prepare($query);
