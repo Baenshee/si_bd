@@ -94,7 +94,7 @@ $i=0;
             <div class="form-actions">
                 </br></br>
                 <button type="submit" class="btn btn-success">Création</button>
-                <a href="./index.php?EX=createItem"><button type="button" class="btn">Retour</button></a>
+                <a href="./index.php?EX=createFacility"><button type="button" class="btn">Retour</button></a>
             </div>
         </form>
     </div>

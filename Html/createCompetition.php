@@ -7,10 +7,11 @@ if(isset($_POST['NAME'])) {
     $startingdate = $_POST['STARTINGDATE'];
     $endingdate = $_POST['ENDINGDATE'];
     $description = $_POST['DESCRIPTION'];
+    $idfacility = $_POST['FACILITY'];
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $sql = "INSERT INTO COMPETITION (NAME, CAPACITY, LETHALITY, STARTINGDATE, ENDINGDATE, TRUC, DESCRIPTION) values(?,?,?,?,?,?,?)";
+    $sql = "INSERT INTO COMPETITION (NAME, CAPACITY, LETHALITY, STARTINGDATE, ENDINGDATE, ID_FACILITY, DESCRIPTION) values(?,?,?,?,?,?,?)";
     $q = $pdo->prepare($sql);
-    $q->execute(array($name, $capacity, $lethality, $startingdate, $endingdate, $truc, $description));
+    $q->execute(array($name, $capacity, $lethality, $startingdate, $endingdate, $idfacility, $description));
     $id= $pdo->lastInsertId();
     echo $id;
     header("./index.php?EX=createCompetition&id=".$id);
@@ -18,10 +19,18 @@ if(isset($_POST['NAME'])) {
 
 $i=0;
 $pdo = new MDBase();
-$families = $pdo -> getAllFacilities_families();
-foreach($familiesList as $line){
-    $families[$i]['ID']=$line['ID'];
-    $families[$i]['NAME']=$line['NAME'];
+$facilities = $pdo -> getAllFacilities();
+foreach($facilitiesList as $line){
+    $facilities[$i]['ID']=$line['ID'];
+    $facilities[$i]['NAME']=$line['NAME'];
+    $i++;
+}
+$i=0;
+
+$items = $pdo -> getAllItems();
+foreach($itemsList as $line){
+    $items[$i]['ID']=$line['ID'];
+    $items[$i]['NAME']=$line['NAME'];
     $i++;
 }
 $i=0;
@@ -43,43 +52,32 @@ $i=0;
             </div>
 
             <div class="control-group">
-                <label class="control-label">Niveau</label>
+                <label class="control-label">Capacité</label>
                 <div class="controls">
-                    <input name="LEVEL" id="level" type="text"  placeholder="Niveau" value="">
+                    <input name="CAPACITY" id="capacity" type="text"  placeholder="Capacité" value="">
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label">Famille</label>
+                <label class="control-label">Mortalité</label>
                 </br>
-                <select class="controls" name="FAMILY" type="text">
-                    <?php
-                    echo('<option></option>');
-                    foreach ($families as $key => $fams) {
-                        echo('<option value ='.$fams['ID'].'>'.$fams['NAME'].'</option>');
-                    }
-                    ?>
+                <select class="controls" name="LETHALITY" type="text">
+                    <option value ='true'>Oui</option>
+                    <option value ='false'>Non</option>
                 </select>
             </div>
 
             <div class="control-group">
-                <label class="control-label">Capacité d'objets</label>
+                <label class="control-label">Date de départ</label>
                 <div class="controls">
-                    <input name="ITEMCAPACITY" id="itemCapacity" type="text"  placeholder="Capacité d'objets" value="">
+                    <input name="STARTINGDATE" id="startingdate" type="date" >
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label">Capacité d'esclaves</label>
+                <label class="control-label">Date de fin</label>
                 <div class="controls">
-                    <input name="FIGHTERCAPACITY" id="fighterCapacity" type="text"  placeholder="Capacité d'esclaves" value="">
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label">Prix</label>
-                <div class="controls">
-                    <input name="PRICE" id="price" type="text"  placeholder="Prix" value="">
+                    <input name="ENDINGDATE" id="endingdate" type="date" >
                 </div>
             </div>
 
@@ -90,10 +88,35 @@ $i=0;
                 </div>
             </div>
 
+            <div class="control-group">
+                <label class="control-label">Infrastructure accueillant l'évènement</label>
+                </br>
+                <select class="controls" name="FACILITY" type="text">
+                    <?php
+                    foreach ($facilities as $key => $facility) {
+                        echo('<option value ='.$facility['ID'].'>'.$facility['NAME'].'</option>');
+                    }
+                    ?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Récompense</label>
+                </br>
+                <select class="controls" name="REWARD" type="text">
+                <?php
+                echo('<option></option>');
+                foreach ($items as $key => $item) {
+                    echo('<option value ='.$item['ID'].'>'.$item['NAME'].'</option>');
+                }
+                ?>
+                </select>
+            </div>
+
             <div class="form-actions">
                 </br></br>
                 <button type="submit" class="btn btn-success">Création</button>
-                <a href="./index.php?EX=createItem"><button type="button" class="btn">Retour</button></a>
+                <a href="./index.php?EX=createCompetition"><button type="button" class="btn">Retour</button></a>
             </div>
         </form>
     </div>

@@ -1,13 +1,6 @@
 <?php
 $i=0;
 $pdo = new MDBase();
-$families = $pdo -> getAllItem_families();
-foreach($familiesList as $line){
-    $families[$i]['ID']=$line['ID'];
-    $families[$i]['NAME']=$line['NAME'];
-    $i++;
-}
-$i=0;
 
 $races = $pdo -> getAllRaces();
 foreach($racesList as $line){
@@ -17,11 +10,26 @@ foreach($racesList as $line){
 }
 $i=0;
 
+$levels = $pdo -> getAllLevels();
+foreach($levelsList as $line){
+    $levels[$i]['ID']=$line['ID'];
+    $levels[$i]['LEVEL']=$line['LEVEL'];
+    $i++;
+}
+$i=0;
+
+$players = $pdo -> getAllPlayers();
+foreach($playersList as $line){
+    $players[$i]['ID']=$line['ID'];
+    $players[$i]['PSEUDO']=$line['PSEUDO'];
+    $i++;
+}
+$i=0;
 ?>
 
 <div class="container">
     <div class="row">
-        <h3>FNESITE</h3>
+        <h3>RECHERCHE</h3>
     </div>
 
 
@@ -34,9 +42,15 @@ $i=0;
         </div>
         <div class="control-group">
             <label class="control-label">Niveau</label>
-            <div class="controls">
-                <input name="LEVEL" id="level" type="text"  placeholder="Niveau" value="">
-            </div>
+            </br>
+            <select class="controls" name="LEVEL" type="text">
+                <?php
+                echo('<option></option>');
+                foreach ($levels as $key => $lvl) {
+                    echo('<option value ='.$lvl['ID'].'>'.$lvl['LEVEL'].'</option>');
+                }
+                ?>
+            </select>
         </div>
         <div class="control-group">
             <label class="control-label">Race</label>
@@ -54,6 +68,20 @@ $i=0;
             <label class="control-label">Prix</label>
             <div class="controls">
                 <input name="PRICE" id="price" type="text"  placeholder="Prix" value="">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Propriétaire</label>
+            <div class="controls">
+                <select class="controls" name="OWNER" type="text">
+                    <?php
+                    echo('<option></option>');
+                    foreach ($players as $key => $play) {
+                        echo('<option value ='.$play['ID'].'>'.$play['PSEUDO'].'</option>');
+                    }
+                    ?>
+                </select>
             </div>
         </div>
         <div class="form-actions">
