@@ -1,7 +1,7 @@
 <?php
 header ('Content-Type: text/html; charset=utf-8');
 require('Inc/require.inc.php');
-require('Inc/globals.inc.php');
+//require('Inc/globals.inc.php');
 $EX = isset($_REQUEST['EX']) ? $_REQUEST['EX'] : 'home';
 if(isset($_REQUEST['idPrev'])){
     $idPrev= $_REQUEST['idPrev'];

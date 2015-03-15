@@ -47,6 +47,7 @@
             </thead>
             <tbody>
             <?php
+            $pdo= new MDBase();
             if(isset($_POST['PSEUDO'])) {
                 $nom = $_POST['PSEUDO'];
                 $conditions = array();
@@ -81,7 +82,7 @@
                 }
             }else {
 
-                $sql = 'SELECT * FROM PLAYER order by PSEUDO ASC';
+                $sql = 'SELECT * FROM PLAYER order by PSEUDO ASC Limit 10';
                 if(count($sql) > 0) {
 
                     foreach ($pdo->query($sql) as $row) {
