@@ -7,11 +7,10 @@
         $potency = $_POST['POTENCY'];
         $price = $_POST['PRICE'];
         $description = $_POST['DESCRIPTION'];
-        $effects = $_POST['EFFECTS'];
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql = "INSERT INTO ITEM (NAME, LEVEL, FAMILY, POTENCY, PRICE, DESCRIPTION, ID_EFFECT) values(?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO ITEM (NAME, LEVEL, FAMILY, POTENCY, PRICE, DESCRIPTION) values(?,?,?,?,?,?,?)";
         $q = $pdo->prepare($sql);
-        $q->execute(array($name, $lvl, $family, $potency, $price, $description, $effects));
+        $q->execute(array($name, $lvl, $family, $potency, $price, $description));
         $id= $pdo->lastInsertId();
         echo $id;
         header("./index.php?EX=createItem&id=".$id);
@@ -23,14 +22,6 @@
     foreach($familiesList as $line){
         $families[$i]['ID']=$line['ID'];
         $families[$i]['NAME']=$line['NAME'];
-        $i++;
-    }
-    $i=0;
-
-    $effects = $pdo -> getAllEffects();
-    foreach($effectsList as $line){
-        $effects[$i]['ID']=$line['ID'];
-        $effects[$i]['TYPE']=$line['TYPE'];
         $i++;
     }
     $i=0;
@@ -90,19 +81,6 @@
                             <div class="controls">
                                 <input name="DESCRIPTION" id="description" type="text"  placeholder="Description" value="">
                             </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label class="control-label">Effets</label>
-                            </br>
-                            <select class="controls" name="EFFECT" type="text">
-                                <?php
-                                echo('<option></option>');
-                                foreach ($effects as $key => $eff) {
-                                    echo('<option value ='.$eff['ID'].'>'.$eff['TYPE'].'</option>');
-                                }
-                                ?>
-                            </select>
                         </div>
 
 				        <div class="form-actions">

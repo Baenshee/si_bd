@@ -9,6 +9,8 @@ $vHtml = new VHtml();
 <head>
     <meta charset="utf-8" />
     <title><?= $page['title']; ?></title>
+    <link rel="stylesheet" href="./Css/bootstrap.min.css">
+    <link rel="stylesheet" href="./Css/Main.css">
 </head>
 <body>
     <nav>

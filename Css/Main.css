@@ -1,0 +1,15 @@
+body{
+  background-color:#e0e0e0;
+}
+
+.page{
+  display: table;
+  margin: 0 auto;
+  background-color: white;
+  width: 960px;
+}
+
+#formconnec{
+  display: table;
+  margin: 250 auto;
+}
