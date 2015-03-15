@@ -1,6 +1,6 @@
 <?php
 
-$pdo = new MDBase();
+$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
 
 $players = $pdo -> getAllPlayers();
 foreach($playersList as $line){
@@ -71,7 +71,7 @@ $i=0;
             <tbody>
             <?php
             //rechercher par l'owner
-            $pdo = new MDBase();
+            $pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
             if(isset($_POST['NAME'])) {
                 $nom = $_POST['NAME'];
                 $conditions = array();

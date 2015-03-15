@@ -16,7 +16,7 @@
             </thead>
             <tbody>
             <?php
-            $pdo= new MDBase();
+            $pdo= new MDBase($_SESSION['USER'],$_SESSION['PASS']);
             if(isset($_GET['tab'])){
               $sql='Repair Table '.$_GET['tab'];
               foreach($pdo->query($sql) as $row){

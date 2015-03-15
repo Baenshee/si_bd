@@ -11,15 +11,14 @@ class MDBase extends PDO {
     private $dbUserPassword;
     private $cont  = null;
 //*/
-    public function __construct(){
+    public function __construct($user, $pass){
         $dns = $this->engine.':dbname='.$this->dbName.";host=".$this->dbHost;
-        $this->dbUsername='root';
-        $this->dbUserPassword= '';
+        $this->dbUsername=$user;
+        $this->dbUserPassword= $pass;
         try{
           parent::__construct( $dns, $this->dbUsername, $this->dbUserPassword );
         }
         catch(PDOException $e){
-          die($e->getMessage());
           header("Location: ../index.php?Error=1");
         }
     }
@@ -35,10 +34,10 @@ class MDBase extends PDO {
             }
             catch(PDOException $e)
             {
-                die($e->getMessage());
                 header("Location: ../index.php?Error=1");
             }
         }
+        session_start();
         $_SESSION['USER']=$this->dbUsername;
         $_SESSION['PASS']=$this->dbUserPassword;
         return $this->cont;

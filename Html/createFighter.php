@@ -1,7 +1,7 @@
 <?php
 
 $i=0;
-$pdo = new MDBase();
+$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
 $races = $pdo -> getAllRaces();
 foreach($racesList as $line){
     $races[$i]['ID']=$line['ID'];

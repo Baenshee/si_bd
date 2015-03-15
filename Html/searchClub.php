@@ -1,6 +1,6 @@
 <?php
 
-$pdo = new MDBase();
+$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
 
 $players = $pdo -> getAllPlayers();
 foreach($playersList as $line){

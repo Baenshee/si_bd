@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <h3>FNESITE</h3>
+        <h3>Recherche de joueurs</h3>
     </div>
 
 
@@ -47,6 +47,7 @@
             </thead>
             <tbody>
             <?php
+            $pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
             if(isset($_POST['PSEUDO'])) {
                 $nom = $_POST['PSEUDO'];
                 $conditions = array();
@@ -81,14 +82,14 @@
                 }
             }else {
 
-                $sql = 'SELECT * FROM PLAYER order by PSEUDO ASC';
+                $sql = 'SELECT * FROM PLAYER order by pseudo ASC LIMIT 50';
                 if(count($sql) > 0) {
 
                     foreach ($pdo->query($sql) as $row) {
                         echo '<tr>';
-                        echo '<td>'. $row['PSEUDO'] . '</td>';
-                        echo '<td>'. $row['EMAIL'] . '</td>';
-                        echo '<td>'. $row['LASTCONNECTION'] . '</td>';
+                        echo '<td>'. $row['pseudo'] . '</td>';
+                        echo '<td>'. $row['email'] . '</td>';
+                        echo '<td>'. $row['lastConnection'] . '</td>';
                         echo '<td width=250>';
                         echo '</td>';
                         echo '</tr>';

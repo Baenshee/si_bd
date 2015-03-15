@@ -14,7 +14,7 @@ if(isset($_POST['NAME'])) {
     header("./index.php?EX=createCenter&id=".$id);
 }
 
-$pdo = new MDBase();
+$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
 
 ?>
 <div class="container">

@@ -1,6 +1,6 @@
 <?php
 $i=0;
-$pdo = new MDBase();
+$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
 $families = $pdo -> getAllFacilities_families();
 foreach($familiesList as $line){
     $families[$i]['ID']=$line['ID'];

@@ -14,7 +14,7 @@ if(isset($_POST['NAME'])) {
     echo $id;
     header("./index.php?EX=createClub&id=".$id);
 }
-$pdo = new MDBase();
+$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
 
 ?>
 <div class="container">
