@@ -5,7 +5,7 @@ class MDBase extends PDO {
     private $engine = 'mysql';
 
     // LOCAL
-    private $dbName = 'DBESCLAVE' ;
+    private $dbName = 'Slave' ;
     private $dbHost = 'localhost' ;
     private $dbUsername;
     private $dbUserPassword;
