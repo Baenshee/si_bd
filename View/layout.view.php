@@ -1,7 +1,6 @@
 <?php
 $vnav = new VNav();
 $vpage = new $page['class']();
-$connec = new MDBase();
 $vHtml = new VHtml();
 ?>
 <!DOCTYPE html>
@@ -13,10 +12,12 @@ $vHtml = new VHtml();
     <link rel="stylesheet" href="./Css/Main.css">
 </head>
 <body>
+  <div class="page"> <!-- Contenu de la page -->
     <nav>
         <?php $vnav->showNav() ?>
     </nav>
-    <div class="page">
+    <div class="content">
         <?php $vpage->$page['method']($page['arg']) ?>
     </div>
+  </div>
 </body>

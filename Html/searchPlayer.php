@@ -72,7 +72,7 @@
             </thead>
             <tbody>
             <?php
-            $pdo = new MDBase();
+            $pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
             if(isset($_POST['PSEUDO'])) {
                 $nom = $_POST['PSEUDO'];
                 $conditions = array();
@@ -94,14 +94,14 @@
                     foreach ($pdo->query('SELECT Count(*) As NUM FROM PLAYER'. $where) as $row) {
                         $rowNumber= $row['NUM'];
                     }
-                    $sql = 'SELECT * FROM PLAYER'. $where .' LIMIT '.$nbLines.' OFFSET '.$offset;
+                    $sql = 'SELECT * FROM Player'. $where .' LIMIT '.$nbLines.' OFFSET '.$offset;
                 }else {
                     foreach ($pdo->query('SELECT Count(*) As NUM FROM PLAYER') as $row) {
                         $rowNumber= $row['NUM'];
                     }
-                    $sql = 'SELECT * FROM PLAYER order by PSEUDO ASC LIMIT '.$nbLines.' OFFSET '.$offset;
+                    $sql = 'SELECT * FROM Player order by PSEUDO ASC LIMIT '.$nbLines.' OFFSET '.$offset;
                 }
-                
+
                 foreach ($pdo->query($sql) as $row) {
                     echo '<tr>';
                     echo '<td>'. $row['pseudo'] . '</td>';
@@ -115,10 +115,10 @@
                 }
             }else {
 
-                foreach ($pdo->query('SELECT Count(*) As NUM FROM player') as $row) {
+                foreach ($pdo->query('SELECT Count(*) As NUM FROM Player') as $row) {
                     $rowNumber= $row['NUM'];
                 }
-                $sql = 'SELECT * FROM player order by pseudo ASC LIMIT '.$nbLines.' OFFSET '.$offset;
+                $sql = 'SELECT * FROM Player order by pseudo ASC LIMIT '.$nbLines.' OFFSET '.$offset;
                 if(count($sql) > 0) {
 
                     foreach ($pdo->query($sql) as $row) {
@@ -145,21 +145,21 @@
             <?php
                 $numberPages= ceil($rowNumber/$nbLines);
                 if($numberPages!=0){
-                    if($nbPage>3){                
-                        echo '<button type="submit" class="changePageButton" form="searchPlayer" formaction="./index.php?EX=searchPlayer&PAGE=1">1</button>';   
-                    }      
+                    if($nbPage>3){
+                        echo '<button type="submit" class="changePageButton" form="searchPlayer" formaction="./index.php?EX=searchPlayer&PAGE=1">1</button>';
+                    }
                     if($nbPage!=1){
                         echo '<button type="submit" class="changePageButton" form="searchPlayer" formaction="./index.php?EX=searchPlayer&PAGE='.($nbPage-1).'">'.($nbPage-1).'</button>';
-                    } 
-                    echo '<button type="submit" class="changePageButton" form="searchPlayer" formaction="./index.php?EX=searchPlayer&PAGE='.$nbPage.'">'.$nbPage.'</button>';  
+                    }
+                    echo '<button type="submit" class="changePageButton" form="searchPlayer" formaction="./index.php?EX=searchPlayer&PAGE='.$nbPage.'">'.$nbPage.'</button>';
                     if($nbPage!=$numberPages){
                         echo '<button type="submit" class="changePageButton" form="searchPlayer" formaction="./index.php?EX=searchPlayer&PAGE='.($nbPage+1).'">'.($nbPage+1).'</button>';
-                    }            
+                    }
                     if($nbPage<($numberPages-2)){
                         echo '<button type="submit" class="changePageButton" form="searchPlayer" formaction="./index.php?EX=searchPlayer&PAGE='.$numberPages.'">'.$numberPages.'</button>';
                     }
                 }
-            
+
             ?>
             </div>
         </div>

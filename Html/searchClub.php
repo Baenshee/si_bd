@@ -8,7 +8,7 @@ if(isset($_GET['PAGE']))
   $nbPage=$_GET['PAGE'];
 $offset= ($nbPage-1)*$nbLines;
 
-$pdo = new MDBase();
+$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
 ?>
 
 <div class="container">
@@ -153,22 +153,22 @@ $pdo = new MDBase();
                     $numberPages= ceil($rowNumber/$nbLines);
                     if($numberPages!=0){
 
-                        if($nbPage>3){                
-                            echo '<button type="submit" class="changePageButton" form="searchFacility" formaction="./index.php?EX=searchFacility&PAGE=1">1</button>';   
-                        }      
+                        if($nbPage>3){
+                            echo '<button type="submit" class="changePageButton" form="searchFacility" formaction="./index.php?EX=searchFacility&PAGE=1">1</button>';
+                        }
                         if($nbPage!=1){
                             echo '<button type="submit" class="changePageButton" form="searchFacility" formaction="./index.php?EX=searchFacility&PAGE='.($nbPage-1).'">'.($nbPage-1).'</button>';
-                        } 
-                        echo '<button type="submit" class="changePageButton" form="searchFacility" formaction="./index.php?EX=searchFacility&PAGE='.$nbPage.'">'.$nbPage.'</button>';  
+                        }
+                        echo '<button type="submit" class="changePageButton" form="searchFacility" formaction="./index.php?EX=searchFacility&PAGE='.$nbPage.'">'.$nbPage.'</button>';
                         if($nbPage!=$numberPages){
                             echo '<button type="submit" class="changePageButton" form="searchFacility" formaction="./index.php?EX=searchFacility&PAGE='.($nbPage+1).'">'.($nbPage+1).'</button>';
-                        }            
+                        }
                         if($nbPage<($numberPages-2)){
                             echo '<button type="submit" class="changePageButton" form="searchFacility" formaction="./index.php?EX=searchFacility&PAGE='.$numberPages.'">'.$numberPages.'</button>';
                         }
 
                     }
-            
+
                 ?>
             </div>
         </div>

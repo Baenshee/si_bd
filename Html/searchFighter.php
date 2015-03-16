@@ -9,15 +9,7 @@ if(isset($_GET['PAGE']))
 $offset= ($nbPage-1)*$nbLines;
 
 $i=0;
-$pdo = new MDBase();
-
-$racesList = $pdo -> getAllRaces();
-foreach($racesList as $line){
-    $races[$i]['id']=$line['id'];
-    $races[$i]['name']=$line['name'];
-    $i++;
-}
-$i=0;
+$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
 
 ?>
 
@@ -70,7 +62,7 @@ $i=0;
                 </select>
 
             </div>
-    </div>  
+    </div>
         <div class="form-actions">
             </br>
             </br>
@@ -132,15 +124,15 @@ $i=0;
                 }
                 $where = " WHERE ".implode($conditions,' AND ');
                 if(count($conditions) > 0) {
-                    foreach ($pdo->query('SELECT Count(*) As NUM FROM fighter'. $where) as $row) {
+                    foreach ($pdo->query('SELECT Count(*) As NUM FROM Fighter'. $where) as $row) {
                         $rowNumber= $row['NUM'];
                     }
-                    $sql = 'SELECT * FROM fighter'. $where .' LIMIT '.$nbLines.' OFFSET '.$offset;
+                    $sql = 'SELECT * FROM Fighter'. $where .' LIMIT '.$nbLines.' OFFSET '.$offset;
                 }else {
-                    foreach ($pdo->query('SELECT Count(*) As NUM FROM fighter') as $row) {
+                    foreach ($pdo->query('SELECT Count(*) As NUM FROM Fighter') as $row) {
                         $rowNumber= $row['NUM'];
                     }
-                    $sql = 'SELECT * FROM fighter order by serialNumber ASC LIMIT '.$nbLines.' OFFSET '.$offset;
+                    $sql = 'SELECT * FROM Fighter order by serialNumber ASC LIMIT '.$nbLines.' OFFSET '.$offset;
                 }
 
                 foreach ($pdo->query($sql) as $row) {
@@ -173,13 +165,13 @@ $i=0;
                     echo '</td>';
                     echo '</tr>';
                 }
-            }else {                
+            }else {
 
-                foreach ($pdo->query('SELECT Count(*) As NUM FROM fighter') as $row) {
+                foreach ($pdo->query('SELECT Count(*) As NUM FROM Fighter') as $row) {
                     $rowNumber= $row['NUM'];
                 }
 
-                $sql = 'SELECT * FROM fighter order by serialNumber ASC LIMIT '.$nbLines.' OFFSET '.$offset;
+                $sql = 'SELECT * FROM Fighter order by serialNumber ASC LIMIT '.$nbLines.' OFFSET '.$offset;
 
                 if(count($sql) > 0) {
 
@@ -227,22 +219,22 @@ $i=0;
                     $numberPages= ceil($rowNumber/$nbLines);
                     if($numberPages!=0){
 
-                        if($nbPage>3){                
-                            echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE=1">1</button>';   
-                        }      
+                        if($nbPage>3){
+                            echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE=1">1</button>';
+                        }
                         if($nbPage!=1){
                             echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE='.($nbPage-1).'">'.($nbPage-1).'</button>';
-                        } 
-                        echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE='.$nbPage.'">'.$nbPage.'</button>';  
+                        }
+                        echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE='.$nbPage.'">'.$nbPage.'</button>';
                         if($nbPage!=$numberPages){
                             echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE='.($nbPage+1).'">'.($nbPage+1).'</button>';
-                        }            
+                        }
                         if($nbPage<($numberPages-2)){
                             echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE='.$numberPages.'">'.$numberPages.'</button>';
                         }
 
                     }
-            
+
                 ?>
         </div>
     </div>

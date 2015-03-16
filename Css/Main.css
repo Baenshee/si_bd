@@ -2,14 +2,35 @@ body{
   background-color:#e0e0e0;
 }
 
+nav{
+  float:left;
+  margin-top: 200px;
+}
+
+.content{
+  float:right;
+}
+
 .page{
   display: table;
   margin: 0 auto;
   background-color: white;
+  width: 1200px;
+}
+
+.container{
   width: 960px;
+  float: right;
 }
 
 #formconnec{
   display: table;
-  margin: 250 auto;
+  margin: 300px;
+}
+
+.error{
+  position: absolute;
+  float: right;
+  display: table;
+  margin: 250px;
 }
