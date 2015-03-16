@@ -39,8 +39,11 @@ class MDBase extends PDO {
                 header("Location: ../index.php?Error=1");
             }
         }
-        $_SESSION['USER']=$this->dbUsername;
-        $_SESSION['PASS']=$this->dbUserPassword;
+        if(!isset($_SESSION['USER'])){
+          session_start();
+          $_SESSION['USER']=$this->dbUsername;
+          $_SESSION['PASS']=$this->dbUserPassword;
+        }
         return $this->cont;
     }
 

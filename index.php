@@ -26,10 +26,6 @@ session_start();
   require('Inc/require.inc.php');
   //require('Inc/globals.inc.php');
   $EX = isset($_REQUEST['EX']) ? $_REQUEST['EX'] : 'home';
-  if(isset($_REQUEST['idPrev'])){
-      $idPrev= $_REQUEST['idPrev'];
-      $idNext= $_REQUEST['idNext'];
-  }
   switch($EX)
   {
       case 'home'      : home();       break;
