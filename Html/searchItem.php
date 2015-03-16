@@ -1,7 +1,7 @@
 <?php
 $i=0;
 $pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
-$families = $pdo -> getAllItem_families();
+$familiesList = $pdo -> getAllItem_families();
 foreach($familiesList as $line){
     $families[$i]['ID']=$line['ID'];
     $families[$i]['NAME']=$line['NAME'];

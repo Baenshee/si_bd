@@ -37,9 +37,11 @@ class MDBase extends PDO {
                 header("Location: ../index.php?Error=1");
             }
         }
-        session_start();
-        $_SESSION['USER']=$this->dbUsername;
-        $_SESSION['PASS']=$this->dbUserPassword;
+        if(!isset($_SESSION['USER'])){
+          session_start();
+          $_SESSION['USER']=$this->dbUsername;
+          $_SESSION['PASS']=$this->dbUserPassword;
+        }
         return $this->cont;
     }
 
@@ -70,7 +72,7 @@ class MDBase extends PDO {
     {
         $pdo = $this->connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $query = "SELECT * FROM ITEM_FAMILY";
+        $query = "SELECT * FROM ITEMFAMILY";
         $qq = $pdo->prepare($query);
         $qq->execute();
         $data = $qq->fetchall();
