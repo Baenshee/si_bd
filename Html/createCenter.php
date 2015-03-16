@@ -1,20 +1,20 @@
 <?php
 
+$pdo = new MDBase();
+
 if(isset($_POST['NAME'])) {
     $name = $_POST['NAME'];
     $capacity = $_POST['CAPACITY'];
     $price = $_POST['PRICE'];
     $description = $_POST['DESCRIPTION'];
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $sql = "INSERT INTO CENTER (NAME, CAPACITY, PRICE, DESCRIPTION) values(?,?,?,?)";
+    $sql = "INSERT INTO center (name, capacity, price, description) values(?,?,?,?)";
     $q = $pdo->prepare($sql);
     $q->execute(array($name, $capacity, $price, $description));
     $id= $pdo->lastInsertId();
-    echo $id;
-    header("./index.php?EX=createCenter&id=".$id);
+    header("./index.php?EX=searchCenter");
 }
 
-$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
 
 ?>
 <div class="container">

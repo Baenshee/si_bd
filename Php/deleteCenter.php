@@ -6,11 +6,12 @@ if ( !empty($_POST)) {
     $id = $_POST['id'];
 
     // delete data
-    $pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
+    $pdo = new MDBase();
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $sql = "DELETE FROM CENTER WHERE ID = ?";
+    $sql = "DELETE FROM center WHERE id = :id";
     $q = $pdo->prepare($sql);
-    $q->execute();
-    header("Location: index.php");
+    $q->bindParam(":id", $id, PDO::PARAM_INT);
+	$q->execute();
+    header("Location: ../index.php?EX=searchCenter");
 }
 ?>

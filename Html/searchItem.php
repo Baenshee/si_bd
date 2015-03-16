@@ -1,18 +1,20 @@
 <?php
-$i=0;
-$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
-$families = $pdo -> getAllItem_families();
-foreach($familiesList as $line){
-    $families[$i]['ID']=$line['ID'];
-    $families[$i]['NAME']=$line['NAME'];
-    $i++;
-}
-$i=0;
 
-$facilities = $pdo -> getAllFacilities();
-foreach($facilitiesList as $line){
-    $facilities[$i]['ID']=$line['ID'];
-    $facilities[$i]['NAME']=$line['NAME'];
+$nbLines=10;
+if(isset($_POST['LINES']))
+  $nbLines=$_POST['LINES'];
+$nbPage=1;
+if(isset($_GET['PAGE']))
+  $nbPage=$_GET['PAGE'];
+$offset= ($nbPage-1)*$nbLines;
+
+
+$i=0;
+$pdo = new MDBase();
+$familiesList = $pdo->getAllItem_families();
+foreach($familiesList as $line){
+    $families[$i]['id']=$line['id'];
+    $families[$i]['name']=$line['name'];
     $i++;
 }
 $i=0;
@@ -21,11 +23,11 @@ $i=0;
 
 <div class="container">
 <div class="row">
-    <h3>FNESITE</h3>
+    <h3>Search item</h3>
 </div>
 
 
-<form class="form-horizontal" action="./index.php?EX=searchItem" method="post">
+<form class="form-horizontal" id="searchItem" action="./index.php?EX=searchItem" method="post">
     <div class="control-group">
         <label class="control-label">Nom</label>
         <div class="controls">
@@ -46,19 +48,7 @@ $i=0;
             <?php
             echo('<option></option>');
             foreach ($families as $key => $fams) {
-                echo('<option value ='.$fams['ID'].'>'.$fams['NAME'].'</option>');
-            }
-            ?>
-        </select>
-    </div>
-    <div class="control-group">
-        <label class="control-label">Facilité</label>
-        </br>
-        <select class="controls" name="FACILITY" type="text">
-            <?php
-            echo('<option></option>');
-            foreach ($facilities as $key => $facil) {
-                echo('<option value ='.$facil['ID'].'>'.$facil['NAME'].'</option>');
+                echo('<option value ='.$fams['id'].'>'.$fams['name'].'</option>');
             }
             ?>
         </select>
@@ -75,6 +65,19 @@ $i=0;
             <input name="PRICE" id="price" type="text"  placeholder="Prix" value="">
         </div>
     </div>
+    <div class="control-group">
+            <label class="control-label">Nombre de résultats à afficher</label>
+            <div class="controls">
+                <select class="controls" name="LINES" type="text">
+                      <option value ='5' <?php if($nbLines == '5'){echo("selected");}?>>5</option>
+                      <option value ='10'<?php if($nbLines == '10'){echo("selected");}?>>10</option>
+                      <option value ='20'<?php if($nbLines == '20'){echo("selected");}?>>20</option>
+                      <option value ='30'<?php if($nbLines == '30'){echo("selected");}?>>30</option>
+                      <option value ='50'<?php if($nbLines == '50'){echo("selected");}?>>50</option>
+                </select>
+
+            </div>
+    </div>  
     <div class="form-actions">
         </br>
         </br>
@@ -93,7 +96,7 @@ $i=0;
             <th>Nom</th>
             <th>Niveau</th>
             <th>Famille</th>
-            <th>Facilité</th>
+            <th>Infrastructure</th>
             <th>Puissance</th>
             <th>Prix</th>
         </tr>
@@ -105,20 +108,16 @@ $i=0;
             $conditions = array();
             $params = array();
             if($nom) {
-                $conditions[] = "NAME LIKE '%". $nom. "%'";
+                $conditions[] = "name LIKE '%". $nom. "%'";
                 $params[]= $nom;
             }
             if($_POST['LEVEL']) {
-                $conditions[] = "LEVEL". $_POST['LEVEL']. "%'";
+                $conditions[] = "level". $_POST['LEVEL']. "%'";
                 $params[] = $_POST['LEVEL'];
             }
             if($_POST['FAMILY']) {
-                $conditions[] = "FAMILY_ID = '". $_POST['FAMILY']. "'";
+                $conditions[] = "id_itemFamily = '". $_POST['FAMILY']. "'";
                 $params[] = $_POST['FAMILY'];
-            }
-            if($_POST['FACILITY']) {
-                $conditions[] = "FACILITY_ID = '". $_POST['FACILITY']. "'";
-                $params[] = $_POST['FACILITY'];
             }
             if($_POST['POTENCY']) {
                 $conditions[] = "POTENCY = '". $_POST['POTENCY']. "'";
@@ -130,39 +129,55 @@ $i=0;
             }
             $where = " WHERE ".implode($conditions,' AND ');
             if(count($conditions) > 0) {
-                $sql = 'SELECT * FROM ITEM'. $where;
+                foreach ($pdo->query('SELECT Count(*) As NUM FROM items'. $where) as $row) {
+                    $rowNumber= $row['NUM'];
+                }
+                $sql = 'SELECT * FROM items'. $where .' LIMIT '.$nbLines.' OFFSET '.$offset;
             }else {
-                $sql = 'SELECT * FROM ITEM order by NAME ASC';
+                foreach ($pdo->query('SELECT Count(*) As NUM FROM items') as $row) {
+                    $rowNumber= $row['NUM'];
+                }
+                $sql = 'SELECT * FROM items order by name ASC LIMIT '.$nbLines.' OFFSET '.$offset;
             }
 
             foreach ($pdo->query($sql) as $row) {
                 echo '<tr>';
-                echo '<td>'. $row['NAME'] . '</td>';
-                echo '<td>'. $row['LEVEL'] . '</td>';
-                echo '<td>'. $row['FAMILY'] . '</td>';
-                echo '<td>'. $row['FACILITY'] . '</td>';
-                echo '<td>'. $row['POTENCY'] . '</td>';
-                echo '<td>'. $row['PRICE'] . '</td>';
+                echo '<td>'. $row['name'] . '</td>';
+                echo '<td>'. $row['level'] . '</td>';
+                echo '<td>'. $row['id_itemFamily'] . '</td>';
+                echo '<td>'. $row['potency'] . '</td>';
+                echo '<td>'. $row['price'] . '</td>';
                 echo '<td width=250>';
+                echo '&nbsp;';
+                echo '<a class="btn btn-success" href="../index.php?EX=updateItem&id='.$row['id'].'">Edit</a>';
+                echo '&nbsp;';
+                echo '<a class="btn btn-danger" href="index.php?EX=deleteItem&id='.$row['id'].'">Supprimer</a>';
                 echo '</td>';
                 echo '</tr>';
             }
         }else {
 
-            $sql = 'SELECT * FROM ITEM order by NAME ASC';
+            foreach ($pdo->query('SELECT Count(*) As NUM FROM items') as $row) {
+              $rowNumber= $row['NUM'];
+            }
+
+            $sql = 'SELECT * FROM items order by name ASC LIMIT '.$nbLines.' OFFSET '.$offset;
             if(count($sql) > 0) {
 
                 foreach ($pdo->query($sql) as $row) {
-                    echo '<tr>';
-                    echo '<td>'. $row['NAME'] . '</td>';
-                    echo '<td>'. $row['LEVEL'] . '</td>';
-                    echo '<td>'. $row['FAMILY'] . '</td>';
-                    echo '<td>'. $row['FACILITY'] . '</td>';
-                    echo '<td>'. $row['POTENCY'] . '</td>';
-                    echo '<td>'. $row['PRICE'] . '</td>';
-                    echo '<td width=250>';
-                    echo '</td>';
-                    echo '</tr>';
+                echo '<tr>';
+                echo '<td>'. $row['name'] . '</td>';
+                echo '<td>'. $row['level'] . '</td>';
+                echo '<td>'. $row['id_itemFamily'] . '</td>';
+                echo '<td>'. $row['potency'] . '</td>';
+                echo '<td>'. $row['price'] . '</td>';
+                echo '<td width=250>';
+                echo '&nbsp;';
+                echo '<a class="btn btn-success" href="index.php?EX=updateItem&id='.$row['id'].'">Edit</a>';
+                echo '&nbsp;';
+                echo '<a class="btn btn-danger" href="index.php?EX=deleteItem&id='.$row['id'].'">Supprimer</a>';
+                echo '</td>';
+                echo '</tr>';
                 }
 
             }
@@ -172,5 +187,30 @@ $i=0;
 
         </tbody>
     </table>
+    <div class="control-group">
+        <div class="controls">
+            <?php
+                $numberPages= ceil($rowNumber/$nbLines);
+                if($numberPages!=0){
+
+                    if($nbPage>3){                
+                        echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE=1">1</button>';   
+                    }      
+                    if($nbPage!=1){
+                        echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE='.($nbPage-1).'">'.($nbPage-1).'</button>';
+                    } 
+                    echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE='.$nbPage.'">'.$nbPage.'</button>';  
+                    if($nbPage!=$numberPages){
+                        echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE='.($nbPage+1).'">'.($nbPage+1).'</button>';
+                    }            
+                    if($nbPage<($numberPages-2)){
+                        echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE='.$numberPages.'">'.$numberPages.'</button>';
+                    }
+
+                }
+            
+            ?>
+        </div>
+    </div>                   
 </div>
 </div> <!-- /container -->

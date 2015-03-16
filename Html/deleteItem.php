@@ -15,10 +15,10 @@ if ( !empty($_GET['id'])) {
 
         <form class="form-horizontal" action="./Php/deleteItem.php" method="post">
             <input type="hidden" name="id" value="<?php echo $id;?>"/>
-            <p class="alert alert-error">Are you sure to delete ?</p>
+            <p class="alert alert-error">Do you really want to delete this ?</p>
             <div class="form-actions">
                 <button type="submit" class="btn btn-danger">Yes</button>
-                <a class="btn" href="./index.php?EX=">No</a>
+                <a class="btn" href="./index.php?EX=searchItem">No</a>
             </div>
         </form>
     </div>

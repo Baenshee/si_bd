@@ -1,30 +1,30 @@
 <?php
 
+$pdo = new MDBase();
+
 if(isset($_POST['NAME'])) {
     $name = $_POST['NAME'];
     $itemCapacity = $_POST['ITEMCAPACITY'];
     $fighterCapacity = $_POST['FIGHTERCAPACITY'];
     $lvl = $_POST['LEVEL'];
     $price = $_POST['PRICE'];
-    $family = $_POST['FACILITYFAMILY'];
+    //$family = $_POST['FACILITYFAMILY'];
     $description = $_POST['DESCRIPTION'];
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $sql = "INSERT INTO FACILITY (NAME, LEVEL, FACILITYFAMILY, ITEMCAPACITY, FIGHTERCAPACITY, PRICE, DESCRIPTION) values(?,?,?,?,?,?,?)";
+    $sql = "INSERT INTO facility (name, level, itemCapacity, fighterCapacity, price, description) values(?,?,?,?,?,?)";
     $q = $pdo->prepare($sql);
-    $q->execute(array($name, $lvl, $family, $itemCapacity, $fighterCapacity, $price, $description));
+    $q->execute(array($name, $lvl, $itemCapacity, $fighterCapacity, $price, $description));
     $id= $pdo->lastInsertId();
-    echo $id;
-    header("./index.php?EX=createFacility&id=".$id);
+    header("./index.php?EX=searchFacility");
 }
 
 $i=0;
-$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
-$families = $pdo -> getAllFacilities_families();
+/*$familiesList = $pdo -> getAllFacilities_families();
 foreach($familiesList as $line){
-    $families[$i]['ID']=$line['ID'];
-    $families[$i]['NAME']=$line['NAME'];
+    $families[$i]['id']=$line['id'];
+    $families[$i]['name']=$line['name'];
     $i++;
-}
+}*/
 $i=0;
 
 ?>
@@ -56,9 +56,9 @@ $i=0;
                 <select class="controls" name="FAMILY" type="text">
                     <?php
                     echo('<option></option>');
-                    foreach ($families as $key => $fams) {
-                        echo('<option value ='.$fams['ID'].'>'.$fams['NAME'].'</option>');
-                    }
+                    /*foreach ($families as $key => $fams) {
+                        echo('<option value ='.$fams['id'].'>'.$fams['name'].'</option>');
+                    }*/
                     ?>
                 </select>
             </div>
@@ -94,7 +94,7 @@ $i=0;
             <div class="form-actions">
                 </br></br>
                 <button type="submit" class="btn btn-success">Création</button>
-                <a href="./index.php?EX=createItem"><button type="button" class="btn">Retour</button></a>
+                <a href="./index.php?EX=createFacility"><button type="button" class="btn">Retour</button></a>
             </div>
         </form>
     </div>

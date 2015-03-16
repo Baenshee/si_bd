@@ -5,20 +5,21 @@ class MDBase extends PDO {
     private $engine = 'mysql';
 
     // LOCAL
-    private $dbName = 'Slave' ;
+    private $dbName = 'DBESCLAVE' ;
     private $dbHost = 'localhost' ;
     private $dbUsername;
     private $dbUserPassword;
     private $cont  = null;
 //*/
-    public function __construct($user, $pass){
+    public function __construct(){
         $dns = $this->engine.':dbname='.$this->dbName.";host=".$this->dbHost;
-        $this->dbUsername=$user;
-        $this->dbUserPassword= $pass;
+        $this->dbUsername='root';
+        $this->dbUserPassword= '';
         try{
           parent::__construct( $dns, $this->dbUsername, $this->dbUserPassword );
         }
         catch(PDOException $e){
+          die($e->getMessage());
           header("Location: ../index.php?Error=1");
         }
     }
@@ -34,10 +35,10 @@ class MDBase extends PDO {
             }
             catch(PDOException $e)
             {
+                die($e->getMessage());
                 header("Location: ../index.php?Error=1");
             }
         }
-        session_start();
         $_SESSION['USER']=$this->dbUsername;
         $_SESSION['PASS']=$this->dbUserPassword;
         return $this->cont;
@@ -70,7 +71,7 @@ class MDBase extends PDO {
     {
         $pdo = $this->connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $query = "SELECT * FROM ITEM_FAMILY";
+        $query = "SELECT * FROM itemfamily";
         $qq = $pdo->prepare($query);
         $qq->execute();
         $data = $qq->fetchall();
@@ -114,7 +115,7 @@ class MDBase extends PDO {
     {
         $pdo = $this->connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $query = "SELECT * FROM CENTER";
+        $query = "SELECT * FROM center";
         $qq = $pdo->prepare($query);
         $qq->execute();
         $data = $qq->fetch(PDO::FETCH_ASSOC);

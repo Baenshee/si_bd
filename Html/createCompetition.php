@@ -1,5 +1,7 @@
 <?php
 
+$pdo = new MDBase();
+
 if(isset($_POST['NAME'])) {
     $name = $_POST['NAME'];
     $capacity = $_POST['CAPACITY'];
@@ -8,22 +10,20 @@ if(isset($_POST['NAME'])) {
     $endingdate = $_POST['ENDINGDATE'];
     $description = $_POST['DESCRIPTION'];
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $sql = "INSERT INTO COMPETITION (NAME, CAPACITY, LETHALITY, STARTINGDATE, ENDINGDATE, TRUC, DESCRIPTION) values(?,?,?,?,?,?,?)";
+    $sql = "INSERT INTO competition (name, capacity, lethality, startingDate, endingDate, description) values(?,?,?,?,?,?)";
     $q = $pdo->prepare($sql);
-    $q->execute(array($name, $capacity, $lethality, $startingdate, $endingdate, $truc, $description));
+    $q->execute(array($name, $capacity, $lethality, $startingdate, $endingdate, $description));
     $id= $pdo->lastInsertId();
-    echo $id;
-    header("./index.php?EX=createCompetition&id=".$id);
+    header("./index.php?EX=searchCompetition");
 }
 
 $i=0;
-$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
-$families = $pdo -> getAllFacilities_families();
+/*$familiesList = $pdo -> getAllFacilities_families();
 foreach($familiesList as $line){
     $families[$i]['ID']=$line['ID'];
     $families[$i]['NAME']=$line['NAME'];
     $i++;
-}
+}*/
 $i=0;
 
 ?>
@@ -42,44 +42,33 @@ $i=0;
                 </div>
             </div>
 
-            <div class="control-group">
-                <label class="control-label">Niveau</label>
-                <div class="controls">
-                    <input name="LEVEL" id="level" type="text"  placeholder="Niveau" value="">
-                </div>
+        <div class="control-group">
+            <label class="control-label">Date de départ</label>
+            <div class="controls">
+                <input name="STARTINGDATE" id="startingdate" type="date" >
             </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Date de fin</label>
+            <div class="controls">
+                <input name="ENDINGDATE" id="endingdate" type="date" >
+            </div>
+        </div>
 
             <div class="control-group">
-                <label class="control-label">Famille</label>
+                <label class="control-label">Mortalité</label>
                 </br>
-                <select class="controls" name="FAMILY" type="text">
-                    <?php
-                    echo('<option></option>');
-                    foreach ($families as $key => $fams) {
-                        echo('<option value ='.$fams['ID'].'>'.$fams['NAME'].'</option>');
-                    }
-                    ?>
+                <select class="controls" name="LETHALITY" type="text">
+                    <option value='1'>Oui</option>
+                    <option value='0'>Non</option>
                 </select>
             </div>
 
             <div class="control-group">
-                <label class="control-label">Capacité d'objets</label>
+                <label class="control-label">Capacité</label>
                 <div class="controls">
-                    <input name="ITEMCAPACITY" id="itemCapacity" type="text"  placeholder="Capacité d'objets" value="">
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label">Capacité d'esclaves</label>
-                <div class="controls">
-                    <input name="FIGHTERCAPACITY" id="fighterCapacity" type="text"  placeholder="Capacité d'esclaves" value="">
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label">Prix</label>
-                <div class="controls">
-                    <input name="PRICE" id="price" type="text"  placeholder="Prix" value="">
+                    <input name="CAPACITY" id="capacity" type="text"  placeholder="Capacité" value="">
                 </div>
             </div>
 
@@ -93,7 +82,7 @@ $i=0;
             <div class="form-actions">
                 </br></br>
                 <button type="submit" class="btn btn-success">Création</button>
-                <a href="./index.php?EX=createItem"><button type="button" class="btn">Retour</button></a>
+                <a href="./index.php?EX=createCompetition"><button type="button" class="btn">Retour</button></a>
             </div>
         </form>
     </div>

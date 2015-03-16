@@ -1,5 +1,6 @@
 <?php
 
+    $pdo = new MDBase();
     if(isset($_POST['NAME'])) {
         $name = $_POST['NAME'];
         $lvl = $_POST['LEVEL'];
@@ -8,20 +9,18 @@
         $price = $_POST['PRICE'];
         $description = $_POST['DESCRIPTION'];
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql = "INSERT INTO ITEM (NAME, LEVEL, FAMILY, POTENCY, PRICE, DESCRIPTION) values(?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO items (name, level, id_itemFamily, potency, price, description) values(?,?,?,?,?,?)";
         $q = $pdo->prepare($sql);
         $q->execute(array($name, $lvl, $family, $potency, $price, $description));
         $id= $pdo->lastInsertId();
-        echo $id;
-        header("./index.php?EX=createItem&id=".$id);
+        header("./index.php?EX=searchItem");
     }
 
     $i=0;
-    $pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
-    $families = $pdo -> getAllItem_families();
-    foreach($familiesList as $line){
-        $families[$i]['ID']=$line['ID'];
-        $families[$i]['NAME']=$line['NAME'];
+    $itemfamiliesList = $pdo -> getAllItem_families();
+    foreach($itemfamiliesList as $line){
+        $itemfamilies[$i]['id']=$line['id'];
+        $itemfamilies[$i]['name']=$line['name'];
         $i++;
     }
     $i=0;
@@ -55,8 +54,8 @@
                             <select class="controls" name="FAMILY" type="text">
                                 <?php
                                 echo('<option></option>');
-                                foreach ($families as $key => $fams) {
-                                    echo('<option value ='.$fams['ID'].'>'.$fams['NAME'].'</option>');
+                                foreach ($itemfamilies as $key => $fams) {
+                                    echo('<option value ='.$fams['id'].'>'.$fams['name'].'</option>');
                                 }
                                 ?>
                             </select>

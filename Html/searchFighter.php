@@ -1,18 +1,20 @@
 <?php
-$i=0;
-$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
-$families = $pdo -> getAllItem_families();
-foreach($familiesList as $line){
-    $families[$i]['ID']=$line['ID'];
-    $families[$i]['NAME']=$line['NAME'];
-    $i++;
-}
-$i=0;
 
-$races = $pdo -> getAllRaces();
+$nbLines=10;
+if(isset($_POST['LINES']))
+  $nbLines=$_POST['LINES'];
+$nbPage=1;
+if(isset($_GET['PAGE']))
+  $nbPage=$_GET['PAGE'];
+$offset= ($nbPage-1)*$nbLines;
+
+$i=0;
+$pdo = new MDBase();
+
+$racesList = $pdo -> getAllRaces();
 foreach($racesList as $line){
-    $races[$i]['ID']=$line['ID'];
-    $races[$i]['NAME']=$line['NAME'];
+    $races[$i]['id']=$line['id'];
+    $races[$i]['name']=$line['name'];
     $i++;
 }
 $i=0;
@@ -21,11 +23,11 @@ $i=0;
 
 <div class="container">
     <div class="row">
-        <h3>FNESITE</h3>
+        <h3>Search fighter</h3>
     </div>
 
 
-    <form class="form-horizontal" action="./index.php?EX=searchFighter" method="post">
+    <form class="form-horizontal" id="searchFighter" action="./index.php?EX=searchFighter" method="post">
         <div class="control-group">
             <label class="control-label">Nom</label>
             <div class="controls">
@@ -45,7 +47,7 @@ $i=0;
                 <?php
                 echo('<option></option>');
                 foreach ($races as $key => $race) {
-                    echo('<option value ='.$race['ID'].'>'.$race['NAME'].'</option>');
+                    echo('<option value ='.$race['id'].'>'.$race['name'].'</option>');
                 }
                 ?>
             </select>
@@ -56,6 +58,19 @@ $i=0;
                 <input name="PRICE" id="price" type="text"  placeholder="Prix" value="">
             </div>
         </div>
+        <div class="control-group">
+            <label class="control-label">Nombre de résultats à afficher</label>
+            <div class="controls">
+                <select class="controls" name="LINES" type="text">
+                      <option value ='5' <?php if($nbLines == '5'){echo("selected");}?>>5</option>
+                      <option value ='10'<?php if($nbLines == '10'){echo("selected");}?>>10</option>
+                      <option value ='20'<?php if($nbLines == '20'){echo("selected");}?>>20</option>
+                      <option value ='30'<?php if($nbLines == '30'){echo("selected");}?>>30</option>
+                      <option value ='50'<?php if($nbLines == '50'){echo("selected");}?>>50</option>
+                </select>
+
+            </div>
+    </div>  
         <div class="form-actions">
             </br>
             </br>
@@ -84,6 +99,7 @@ $i=0;
                 <th>Exh</th>
                 <th>Hung</th>
                 <th>Xp</th>
+                <th>Lvl</th>
                 <th>GeSt</th>
                 <th>Dent</th>
                 <th>Sanity</th>
@@ -99,148 +115,103 @@ $i=0;
                 $conditions = array();
                 $params = array();
                 if($nom) {
-                    $conditions[] = "NAME LIKE '%". $nom. "%'";
+                    $conditions[] = "serialNumber LIKE '%". $nom. "%'";
                     $params[]= $nom;
                 }
                 if($_POST['RACE']) {
-                    $conditions[] = "ID_RACE". $_POST['RACE']. "'";
+                    $conditions[] = "id_race = '". $_POST['RACE']. "'";
                     $params[] = $_POST['RACE'];
                 }
-                if($_POST['RESILIENCE']) {
-                    $conditions[] = "RESILIENCE = '". $_POST['RESILIENCE']. "'";
-                    $params[] = $_POST['RESILIENCE'];
-                }
-                if($_POST['VITALITY']) {
-                    $conditions[] = "VITALITY = '". $_POST['VITALITY']. "'";
-                    $params[] = $_POST['VITALITY'];
-                }
-                if($_POST['JUMPINGHEIGHT']) {
-                    $conditions[] = "JUMPINGHEIGHT = '". $_POST['JUMPINGHEIGHT']. "'";
-                    $params[] = $_POST['JUMPINGHEIGHT'];
-                }
-                if($_POST['SPEED']) {
-                    $conditions[] = "SPEED = '". $_POST['SPEED']. "'";
-                    $params[] = $_POST['SPEED'];
-                }
-                if($_POST['STRENGTH']) {
-                    $conditions[] = "STRENGTH = '". $_POST['STRENGTH']. "'";
-                    $params[] = $_POST['STRENGTH'];
-                }
-                if($_POST['INTELLECT']) {
-                    $conditions[] = "INTELLECT = '". $_POST['INTELLECT']. "'";
-                    $params[] = $_POST['INTELLECT'];
-                }
-                if($_POST['HEALTH']) {
-                    $conditions[] = "HEALTH = '". $_POST['HEALTH']. "'";
-                    $params[] = $_POST['HEALTH'];
-                }
-                if($_POST['STRESS']) {
-                    $conditions[] = "STRESS = '". $_POST['STRESS']. "'";
-                    $params[] = $_POST['STRESS'];
-                }
-                if($_POST['EXHAUSTION']) {
-                    $conditions[] = "EXHAUSTION = '". $_POST['EXHAUSTION']. "'";
-                    $params[] = $_POST['EXHAUSTION'];
-                }
-                if($_POST['HUNGER']) {
-                    $conditions[] = "HUNGER = '". $_POST['HUNGER']. "'";
-                    $params[] = $_POST['HUNGER'];
-                }
-                if($_POST['EXPERIENCE']) {
-                    $conditions[] = "EXPERIENCE = '". $_POST['EXPERIENCE']. "'";
-                    $params[] = $_POST['EXPERIENCE'];
-                }
                 if($_POST['LEVEL']) {
-                    $conditions[] = "ID_LEVEL = '". $_POST['LEVEL']. "'";
+                    $conditions[] = "id_Level = '". $_POST['LEVEL']. "'";
                     $params[] = $_POST['LEVEL'];
                 }
-                if($_POST['GENERALSTATE']) {
-                    $conditions[] = "GENERALSTATE = '". $_POST['GENERALSTATE']. "'";
-                    $params[] = $_POST['GENERALSTATE'];
-                }
-                if($_POST['DENTALHYGIENE']) {
-                    $conditions[] = "DENTALHYGIENE = '". $_POST['DENTALHYGIENE']. "'";
-                    $params[] = $_POST['DENTALHYGIENE'];
-                }
-                if($_POST['SANITY']) {
-                    $conditions[] = "SANITY = '". $_POST['SANITY']. "'";
-                    $params[] = $_POST['SANITY'];
-                }
-                if($_POST['CANNIBAL']) {
-                    $conditions[] = "CANNIBAL = '". $_POST['CANNIBAL']. "'";
-                    $params[] = $_POST['CANNIBAL'];
-                }
-                if($_POST['ALIVE']) {
-                    $conditions[] = "ALIVE = '". $_POST['ALIVE']. "'";
-                    $params[] = $_POST['ALIVE'];
-                }
                 if($_POST['PRICE']) {
-                    $conditions[] = "PRICE = '". $_POST['PRICE']. "'";
+                    $conditions[] = "price = '". $_POST['PRICE']. "'";
                     $params[] = $_POST['PRICE'];
                 }
                 $where = " WHERE ".implode($conditions,' AND ');
                 if(count($conditions) > 0) {
-                    $sql = 'SELECT * FROM FIGHTER'. $where;
+                    foreach ($pdo->query('SELECT Count(*) As NUM FROM fighter'. $where) as $row) {
+                        $rowNumber= $row['NUM'];
+                    }
+                    $sql = 'SELECT * FROM fighter'. $where .' LIMIT '.$nbLines.' OFFSET '.$offset;
                 }else {
-                    $sql = 'SELECT * FROM FIGHTER order by NAME ASC';
+                    foreach ($pdo->query('SELECT Count(*) As NUM FROM fighter') as $row) {
+                        $rowNumber= $row['NUM'];
+                    }
+                    $sql = 'SELECT * FROM fighter order by serialNumber ASC LIMIT '.$nbLines.' OFFSET '.$offset;
                 }
 
                 foreach ($pdo->query($sql) as $row) {
                     echo '<tr>';
-                    echo '<td>'. $row['NAME'] . '</td>';
-                    echo '<td>'. $row['ID_RACE'] . '</td>';
-                    echo '<td>'. $row['RESILIENCE'] . '</td>';
-                    echo '<td>'. $row['VITALITY'] . '</td>';
-                    echo '<td>'. $row['JUMPINGHEIGHT'] . '</td>';
-                    echo '<td>'. $row['SPEED'] . '</td>';
-                    echo '<td>'. $row['STRENGTH'] . '</td>';
-                    echo '<td>'. $row['INTELLECT'] . '</td>';
-                    echo '<td>'. $row['HEALTH'] . '</td>';
-                    echo '<td>'. $row['STRESS'] . '</td>';
-                    echo '<td>'. $row['EXHAUSTION'] . '</td>';
-                    echo '<td>'. $row['HUNGER'] . '</td>';
-                    echo '<td>'. $row['EXPERIENCE'] . '</td>';
-                    echo '<td>'. $row['ID_LEVEL'] . '</td>';
-                    echo '<td>'. $row['GENERALSTATE'] . '</td>';
-                    echo '<td>'. $row['DENTALHYGIENE'] . '</td>';
-                    echo '<td>'. $row['SANITY'] . '</td>';
-                    echo '<td>'. $row['CANNIBAL'] . '</td>';
-                    echo '<td>'. $row['ALIVE'] . '</td>';
-                    echo '<td>'. $row['PRICE'] . '</td>';
+                    echo '<td>'. $row['serialNumber'] . '</td>';
+                    echo '<td>'. $row['id_race'] . '</td>';
+                    echo '<td>'. $row['resilience'] . '</td>';
+                    echo '<td>'. $row['vitality'] . '</td>';
+                    echo '<td>'. $row['jumpingHeight'] . '</td>';
+                    echo '<td>'. $row['speed'] . '</td>';
+                    echo '<td>'. $row['strength'] . '</td>';
+                    echo '<td>'. $row['intellect'] . '</td>';
+                    echo '<td>'. $row['health'] . '</td>';
+                    echo '<td>'. $row['stress'] . '</td>';
+                    echo '<td>'. $row['exhaustion'] . '</td>';
+                    echo '<td>'. $row['hunger'] . '</td>';
+                    echo '<td>'. $row['experience'] . '</td>';
+                    echo '<td>'. $row['id_Level'] . '</td>';
+                    echo '<td>'. $row['generalState'] . '</td>';
+                    echo '<td>'. $row['dentalHygiene'] . '</td>';
+                    echo '<td>'. $row['sanity'] . '</td>';
+                    echo '<td>'. $row['cannibal'] . '</td>';
+                    echo '<td>'. $row['alive'] . '</td>';
+                    echo '<td>'. $row['price'] . '</td>';
                     echo '<td width=250>';
+                    echo '&nbsp;';
+                    echo '<a class="btn btn-success" href="index.php?EX=updateFighter&id='.$row['id'].'">Edit</a>';
+                    echo '&nbsp;';
+                    echo '<a class="btn btn-danger" href="index.php?EX=deleteFighter&id='.$row['id'].'">Supprimer</a>';
                     echo '</td>';
                     echo '</tr>';
                 }
-            }else {
+            }else {                
 
-                $sql = 'SELECT * FROM FIGHTER order by NAME ASC';
+                foreach ($pdo->query('SELECT Count(*) As NUM FROM fighter') as $row) {
+                    $rowNumber= $row['NUM'];
+                }
+
+                $sql = 'SELECT * FROM fighter order by serialNumber ASC LIMIT '.$nbLines.' OFFSET '.$offset;
+
                 if(count($sql) > 0) {
 
                     foreach ($pdo->query($sql) as $row) {
-                        echo '<tr>';
-                        echo '<td>'. $row['NAME'] . '</td>';
-                        echo '<td>'. $row['ID_RACE'] . '</td>';
-                        echo '<td>'. $row['RESILIENCE'] . '</td>';
-                        echo '<td>'. $row['VITALITY'] . '</td>';
-                        echo '<td>'. $row['JUMPINGHEIGHT'] . '</td>';
-                        echo '<td>'. $row['SPEED'] . '</td>';
-                        echo '<td>'. $row['STRENGTH'] . '</td>';
-                        echo '<td>'. $row['INTELLECT'] . '</td>';
-                        echo '<td>'. $row['HEALTH'] . '</td>';
-                        echo '<td>'. $row['STRESS'] . '</td>';
-                        echo '<td>'. $row['EXHAUSTION'] . '</td>';
-                        echo '<td>'. $row['HUNGER'] . '</td>';
-                        echo '<td>'. $row['EXPERIENCE'] . '</td>';
-                        echo '<td>'. $row['ID_LEVEL'] . '</td>';
-                        echo '<td>'. $row['GENERALSTATE'] . '</td>';
-                        echo '<td>'. $row['DENTALHYGIENE'] . '</td>';
-                        echo '<td>'. $row['SANITY'] . '</td>';
-                        echo '<td>'. $row['CANNIBAL'] . '</td>';
-                        echo '<td>'. $row['ALIVE'] . '</td>';
-                        echo '<td>'. $row['PRICE'] . '</td>';
-                        echo '<td width=250>';
-                        echo '</td>';
-                        echo '</tr>';
+                    echo '<tr>';
+                    echo '<td>'. $row['serialNumber'] . '</td>';
+                    echo '<td>'. $row['id_race'] . '</td>';
+                    echo '<td>'. $row['resilience'] . '</td>';
+                    echo '<td>'. $row['vitality'] . '</td>';
+                    echo '<td>'. $row['jumpingHeight'] . '</td>';
+                    echo '<td>'. $row['speed'] . '</td>';
+                    echo '<td>'. $row['strength'] . '</td>';
+                    echo '<td>'. $row['intellect'] . '</td>';
+                    echo '<td>'. $row['health'] . '</td>';
+                    echo '<td>'. $row['stress'] . '</td>';
+                    echo '<td>'. $row['exhaustion'] . '</td>';
+                    echo '<td>'. $row['hunger'] . '</td>';
+                    echo '<td>'. $row['experience'] . '</td>';
+                    echo '<td>'. $row['id_Level'] . '</td>';
+                    echo '<td>'. $row['generalState'] . '</td>';
+                    echo '<td>'. $row['dentalHygiene'] . '</td>';
+                    echo '<td>'. $row['sanity'] . '</td>';
+                    echo '<td>'. $row['cannibal'] . '</td>';
+                    echo '<td>'. $row['alive'] . '</td>';
+                    echo '<td>'. $row['price'] . '</td>';
+                    echo '<td width=250>';
+                    echo '&nbsp;';
+                    echo '<a class="btn btn-success" href="index.php?EX=updateFighter&id='.$row['id'].'">Edit</a>';
+                    echo '&nbsp;';
+                    echo '<a class="btn btn-danger" href="index.php?EX=deleteFighter&id='.$row['id'].'">Supprimer</a>';
+                    echo '</td>';
+                    echo '</tr>';
                     }
 
                 }
@@ -250,5 +221,30 @@ $i=0;
 
             </tbody>
         </table>
+        <div class="control-group">
+            <div class="controls">
+                <?php
+                    $numberPages= ceil($rowNumber/$nbLines);
+                    if($numberPages!=0){
+
+                        if($nbPage>3){                
+                            echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE=1">1</button>';   
+                        }      
+                        if($nbPage!=1){
+                            echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE='.($nbPage-1).'">'.($nbPage-1).'</button>';
+                        } 
+                        echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE='.$nbPage.'">'.$nbPage.'</button>';  
+                        if($nbPage!=$numberPages){
+                            echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE='.($nbPage+1).'">'.($nbPage+1).'</button>';
+                        }            
+                        if($nbPage<($numberPages-2)){
+                            echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE='.$numberPages.'">'.$numberPages.'</button>';
+                        }
+
+                    }
+            
+                ?>
+        </div>
+    </div>
     </div>
 </div> <!-- /container -->

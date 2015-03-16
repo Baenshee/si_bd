@@ -1,70 +1,70 @@
 <?php
 
 $i=0;
-$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
-$races = $pdo -> getAllRaces();
+$pdo = new MDBase();
+$racesList = $pdo -> getAllRaces();
 foreach($racesList as $line){
-    $races[$i]['ID']=$line['ID'];
-    $races[$i]['NAME']=$line['NAME'];
+    $races[$i]['id']=$line['id'];
+    $races[$i]['name']=$line['name'];
     $i++;
 }
 $i=0;
 
 if(isset($_POST['RACE'])) {
     $race = $_POST['RACE'];
-    $matricule = explode('', $race);
+    $matricule = explode(' ', $race);
     $name = $matricule[0] . rand(100, 999);
     while(isset($_POST[$name])) {
         $name = $matricule[0] . rand(100, 999);
     }
     if(!isset($_POST['RESILIENCE'])) {
-        $resilience = rand(0, 100);
+        $resilience = $_POST['RESILIENCE'];
     }
     else {
-        $resilience = $_POST['RESILIENCE'];
+        $resilience = rand(0, 10);
     }
     if(!isset($_POST['VITALITY'])) {
-        $vitality = rand(0, 100);
-    }
-    else {
         $vitality = $_POST['VITALITY'];
     }
-    if(!isset($_POST['JUMPINGHEIGHT'])) {
-        $jumpingheight = rand(0, 100);
-    }
     else {
+        $vitality = rand(0, 10);
+    }
+    if(!isset($_POST['JUMPINGHEIGHT'])) {
         $jumpingheight = $_POST['JUMPINGHEIGHT'];
     }
-    if(!isset($_POST['SPEED'])) {
-        $speed = rand(0, 100);
-    }
     else {
+        $jumpingheight = rand(0, 10);
+    }
+    if(!isset($_POST['SPEED'])) {
         $speed = $_POST['SPEED'];
     }
-    if(!isset($_POST['STRENGTH'])) {
-        $strength = rand(0, 100);
-    }
     else {
+        $speed = rand(0, 10);
+    }
+    if(!isset($_POST['STRENGTH'])) {
         $strength = $_POST['STRENGTH'];
     }
-    if(!isset($_POST['INTELLECT'])) {
-        $intellect = rand(0, 100);
-    }
     else {
+        $strength = rand(0, 10);
+    }
+    if(!isset($_POST['INTELLECT'])) {
         $intellect = $_POST['INTELLECT'];
     }
+    else {
+        $intellect = rand(0, 10);
+    }
     if(!isset($_POST['RESILIENCE'])) {
-        $resilience = rand(0, 100);
+        $resilience = $_POST['RESILIENCE'];
     }
     else {
-        $resilience = $_POST['RESILIENCE'];
+        $resilience = rand(0, 10);
     }
     $health = 0;
     $stress = 0;
     $exhaustion = 0;
     $hunger = 0;
     $experience = 0;
-    $generalstate =
+    $generalstate = 10;
     $dentalhygiene = rand(0, 10);
     $sanity = rand(0, 10);
     $cannibal = rand(0,1) == 1;
@@ -72,12 +72,11 @@ if(isset($_POST['RACE'])) {
     $description = $_POST['DESCRIPTION'];
     $price = $_POST['PRICE']; //pas de random, calculer par rapport aux stats si jamais il n'est pas spécifié (ou tout le temps?)
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $sql = "INSERT INTO FIGHTER (NAME, RACE, RESILIENCE, VITALITY, JUMPINGHEIGHT, SPEED, STRENGTH, INTELLECT, HEALTH, STRESS, EXHAUSTION, HUNGER, EXPERIENCE, GENERALSTATE, DENTALHYGIENE, SANITY, CANNIBAL, ALIVE, DESCRIPTION, PRICE) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    $sql = "INSERT INTO fighter (serialNumber, id_race, resilience, vitality, jumpingHeight, speed, strength, intellect, health, stress, exhaustion, hunger, experience, generalState, dentalHygiene, sanity, cannibal, alive, description, price) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $q = $pdo->prepare($sql);
     $q->execute(array($name, $race, $resilience, $vitality, $jumpingheight, $speed, $strength, $intellect, $health, $stress, $exhaustion, $hunger, $experience, $generalstate, $dentalhygiene, $sanity, $cannibal, $alive, $description, $price));
     $id= $pdo->lastInsertId();
-    echo $id;
-    header("./index.php?EX=createFighter&id=".$id);
+    header("./index.php?EX=searchFighter");
 }
 
 ?>
@@ -96,7 +95,7 @@ if(isset($_POST['RACE'])) {
                     <?php
                         echo('<option></option>');
                         foreach ($races as $key => $rac) {
-                            echo('<option value ='.$rac['ID'].'>'.$rac['NAME'].'</option>');
+                            echo('<option value ='.$rac['id'].'>'.$rac['name'].'</option>');
                         }
                     ?>
                 </select>

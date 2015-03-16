@@ -2,15 +2,6 @@ body{
   background-color:#e0e0e0;
 }
 
-nav{
-  float:left;
-  margin-top: 200px;
-}
-
-.content{
-  float:right;
-}
-
 .page{
   display: table;
   margin: 0 auto;
@@ -18,19 +9,7 @@ nav{
   width: 960px;
 }
 
-.container{
-  width: 700px;
-  float: right;
-}
-
 #formconnec{
   display: table;
-  margin: 300px;
-}
-
-.error{
-  position: absolute;
-  float: right;
-  display: table;
-  margin: 250px;
+  margin: 250 auto;
 }

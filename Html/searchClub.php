@@ -1,24 +1,23 @@
 <?php
 
-$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
+$nbLines=10;
+if(isset($_POST['LINES']))
+  $nbLines=$_POST['LINES'];
+$nbPage=1;
+if(isset($_GET['PAGE']))
+  $nbPage=$_GET['PAGE'];
+$offset= ($nbPage-1)*$nbLines;
 
-$players = $pdo -> getAllPlayers();
-foreach($playersList as $line){
-    $players[$i]['ID']=$line['ID'];
-    $players[$i]['PSEUDO']=$line['PSEUDO'];
-    $i++;
-}
-$i=0;
-
+$pdo = new MDBase();
 ?>
 
 <div class="container">
     <div class="row">
-        <h3>RECHERCHE</h3>
+        <h3>Search club</h3>
     </div>
 
 
-    <form class="form-horizontal" action="./index.php?EX=searchClub" method="post">
+    <form class="form-horizontal" id="searchClub" action="./index.php?EX=searchClub" method="post">
         <div class="control-group">
             <label class="control-label">Nom</label>
             <div class="controls">
@@ -34,19 +33,25 @@ $i=0;
         </div>
 
         <div class="control-group">
-            <label class="control-label">Propriétaire</label>
+            <label class="control-label">Prix abonnement</label>
             <div class="controls">
-                <select class="controls" name="OWNER" type="text">
-                    <?php
-                    echo('<option></option>');
-                    foreach ($players as $key => $play) {
-                        echo('<option value ='.$play['ID'].'>'.$play['PSEUDO'].'</option>');
-                    }
-                    ?>
-                </select>
+                <input name="FEE" id="fee" type="text"  placeholder="Prix abonnement" value="">
             </div>
         </div>
 
+        <div class="control-group">
+            <label class="control-label">Nombre de résultats à afficher</label>
+            <div class="controls">
+                <select class="controls" name="LINES" type="text">
+                      <option value ='5' <?php if($nbLines == '5'){echo("selected");}?>>5</option>
+                      <option value ='10'<?php if($nbLines == '10'){echo("selected");}?>>10</option>
+                      <option value ='20'<?php if($nbLines == '20'){echo("selected");}?>>20</option>
+                      <option value ='30'<?php if($nbLines == '30'){echo("selected");}?>>30</option>
+                      <option value ='50'<?php if($nbLines == '50'){echo("selected");}?>>50</option>
+                </select>
+
+            </div>
+        </div>
         <div class="form-actions">
             </br>
             </br>
@@ -74,44 +79,63 @@ $i=0;
                 $conditions = array();
                 $params = array();
                 if($nom) {
-                    $conditions[] = "NAME LIKE '%". $nom. "%'";
+                    $conditions[] = "name LIKE '%". $nom. "%'";
                     $params[]= $nom;
                 }
                 if($_POST['PRICE']) {
-                    $conditions[] = "PRICE". $_POST['PRICE']. "%'";
+                    $conditions[] = "price". $_POST['PRICE']. "%'";
                     $params[] = $_POST['PRICE'];
                 }
                 if($_POST['FEE']) {
-                    $conditions[] = "FEE". $_POST['FEE']. "%'";
+                    $conditions[] = "fee". $_POST['FEE']. "%'";
                     $params[] = $_POST['FEE'];
                 }
                 $where = " WHERE ".implode($conditions,' AND ');
                 if(count($conditions) > 0) {
-                    $sql = 'SELECT * FROM CLUB'. $where;
+                    foreach ($pdo->query('SELECT Count(*) As NUM FROM club'. $where) as $row) {
+                        $rowNumber= $row['NUM'];
+                    }
+                    $sql = 'SELECT * FROM club'. $where .' LIMIT '.$nbLines.' OFFSET '.$offset;
                 }else {
-                    $sql = 'SELECT * FROM CLUB order by NAME ASC';
+                    foreach ($pdo->query('SELECT Count(*) As NUM FROM club') as $row) {
+                        $rowNumber= $row['NUM'];
+                    }
+                    $sql = 'SELECT * FROM club order by name ASC LIMIT '.$nbLines.' OFFSET '.$offset;
                 }
 
                 foreach ($pdo->query($sql) as $row) {
                     echo '<tr>';
-                    echo '<td>'. $row['NAME'] . '</td>';
-                    echo '<td>'. $row['FEE'] . '</td>';
-                    echo '<td>'. $row['PRICE'] . '</td>';
+                    echo '<td>'. $row['name'] . '</td>';
+                    echo '<td>'. $row['fee'] . '</td>';
+                    echo '<td>'. $row['price'] . '</td>';
                     echo '<td width=250>';
+                    echo '&nbsp;';
+                    echo '<a class="btn btn-success" href="index.php?EX=updateClub&id='.$row['id'].'">Edit</a>';
+                    echo '&nbsp;';
+                    echo '<a class="btn btn-danger" href="index.php?EX=deleteClub&id='.$row['id'].'">Supprimer</a>';
                     echo '</td>';
                     echo '</tr>';
                 }
             }else {
 
-                $sql = 'SELECT * FROM CLUB order by NAME ASC';
+                foreach ($pdo->query('SELECT Count(*) As NUM FROM club') as $row) {
+                    $rowNumber= $row['NUM'];
+                }
+
+                $sql = 'SELECT * FROM club order by name ASC LIMIT '.$nbLines.' OFFSET '.$offset;
+
                 if(count($sql) > 0) {
 
                     foreach ($pdo->query($sql) as $row) {
                         echo '<tr>';
-                        echo '<td>'. $row['NAME'] . '</td>';
-                        echo '<td>'. $row['FEE'] . '</td>';
-                        echo '<td>'. $row['PRICE'] . '</td>';
+                        echo '<td>'. $row['name'] . '</td>';
+                        echo '<td>'. $row['fee'] . '</td>';
+                        echo '<td>'. $row['price'] . '</td>';
                         echo '<td width=250>';
+                        echo '&nbsp;';
+                        echo '<a class="btn btn-success" href="index.php?EX=updateClub&id='.$row['id'].'">Edit</a>';
+                        echo '&nbsp;';
+                        echo '<a class="btn btn-danger" href="index.php?EX=deleteClub&id='.$row['id'].'">Supprimer</a>';
                         echo '</td>';
                         echo '</tr>';
                     }
@@ -123,5 +147,30 @@ $i=0;
 
             </tbody>
         </table>
+        <div class="control-group">
+            <div class="controls">
+                <?php
+                    $numberPages= ceil($rowNumber/$nbLines);
+                    if($numberPages!=0){
+
+                        if($nbPage>3){                
+                            echo '<button type="submit" class="changePageButton" form="searchFacility" formaction="./index.php?EX=searchFacility&PAGE=1">1</button>';   
+                        }      
+                        if($nbPage!=1){
+                            echo '<button type="submit" class="changePageButton" form="searchFacility" formaction="./index.php?EX=searchFacility&PAGE='.($nbPage-1).'">'.($nbPage-1).'</button>';
+                        } 
+                        echo '<button type="submit" class="changePageButton" form="searchFacility" formaction="./index.php?EX=searchFacility&PAGE='.$nbPage.'">'.$nbPage.'</button>';  
+                        if($nbPage!=$numberPages){
+                            echo '<button type="submit" class="changePageButton" form="searchFacility" formaction="./index.php?EX=searchFacility&PAGE='.($nbPage+1).'">'.($nbPage+1).'</button>';
+                        }            
+                        if($nbPage<($numberPages-2)){
+                            echo '<button type="submit" class="changePageButton" form="searchFacility" formaction="./index.php?EX=searchFacility&PAGE='.$numberPages.'">'.$numberPages.'</button>';
+                        }
+
+                    }
+            
+                ?>
+            </div>
+        </div>
     </div>
 </div> <!-- /container -->
