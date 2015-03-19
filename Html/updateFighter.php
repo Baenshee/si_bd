@@ -26,22 +26,6 @@ $fighter= new MFighter($id);
         <form class="form-horizontal" action="index.php?EX=updateAFighter&id=<?php echo $id?>" method="post">
 
             <div class="control-group">
-                <label class="control-label">Race</label>
-                </br>
-                <select class="controls" name="RACE" type="text">
-                    <?php
-                        echo('<option></option>');
-                        foreach ($races as $key => $rac) {
-                            if($rac['id']==$race)
-                                echo('<option value ='.$rac['id'].' selected>'.$rac['name'].'</option>');
-                            else
-                                echo('<option value ='.$rac['id'].'>'.$rac['name'].'</option>');
-                        }
-                    ?>
-                </select>
-            </div>
-
-            <div class="control-group">
                 <label class="control-label">Résilience</label>
                 <div class="controls">
                     <input name="RESILIENCE" id="resilience" type="text"  placeholder="Résilience" value="<?php echo !empty($resilience)?$resilience:'';?>">

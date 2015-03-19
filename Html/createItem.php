@@ -16,13 +16,13 @@
         header("./index.php?EX=searchItem");
     }
 
-    $i=0;
+    /*$i=0;
     $itemfamiliesList = $pdo -> getAllItem_families();
     foreach($itemfamiliesList as $line){
         $itemfamilies[$i]['id']=$line['id'];
         $itemfamilies[$i]['name']=$line['name'];
         $i++;
-    }
+    }*/
     $i=0;
 
 ?>

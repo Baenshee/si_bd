@@ -1,22 +1,12 @@
 <?php
 
-$i=0;
 $pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
-$racesList = $pdo -> getAllRaces();
-foreach($racesList as $line){
-    $races[$i]['id']=$line['id'];
-    $races[$i]['name']=$line['name'];
-    $i++;
-}
 $i=0;
 
 if(isset($_POST['RACE'])) {
     $race = $_POST['RACE'];
     $matricule = explode(' ', $race);
     $name = $matricule[0] . rand(100, 999);
-    while(isset($_POST[$name])) {
-        $name = $matricule[0] . rand(100, 999);
-    }
     if(!isset($_POST['RESILIENCE'])) {
         $resilience = $_POST['RESILIENCE'];
     }
@@ -72,9 +62,9 @@ if(isset($_POST['RACE'])) {
     $description = $_POST['DESCRIPTION'];
     $price = $_POST['PRICE']; //pas de random, calculer par rapport aux stats si jamais il n'est pas spécifié (ou tout le temps?)
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $sql = "INSERT INTO fighter (serialNumber, id_race, resilience, vitality, jumpingHeight, speed, strength, intellect, health, stress, exhaustion, hunger, experience, generalState, dentalHygiene, sanity, cannibal, alive, description, price) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    $sql = "INSERT INTO Fighter (serialNumber,  resilience, vitality, jumpingHeight, speed, strength, intellect, health, stress, exhaustion, hunger, experience, generalState, dentalHygiene, sanity, cannibal, alive, description, price) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $q = $pdo->prepare($sql);
-    $q->execute(array($name, $race, $resilience, $vitality, $jumpingheight, $speed, $strength, $intellect, $health, $stress, $exhaustion, $hunger, $experience, $generalstate, $dentalhygiene, $sanity, $cannibal, $alive, $description, $price));
+    $q->execute(array($name,  $resilience, $vitality, $jumpingheight, $speed, $strength, $intellect, $health, $stress, $exhaustion, $hunger, $experience, $generalstate, $dentalhygiene, $sanity, $cannibal, $alive, $description, $price));
     $id= $pdo->lastInsertId();
     header("./index.php?EX=searchFighter");
 }
@@ -90,15 +80,8 @@ if(isset($_POST['RACE'])) {
 
             <div class="control-group">
                 <label class="control-label">Race</label>
+                    <input name="RACE" id="resilience" type="text"  placeholder="Race" value="">
                 </br>
-                <select class="controls" name="RACE" type="text">
-                    <?php
-                        echo('<option></option>');
-                        foreach ($races as $key => $rac) {
-                            echo('<option value ='.$rac['id'].'>'.$rac['name'].'</option>');
-                        }
-                    ?>
-                </select>
             </div>
 
             <div class="control-group">

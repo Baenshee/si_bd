@@ -19,7 +19,6 @@ class MDBase extends PDO {
           parent::__construct( $dns, $this->dbUsername, $this->dbUserPassword );
         }
         catch(PDOException $e){
-          die($e->getMessage());
           header("Location: ../index.php?Error=1");
         }
     }
@@ -35,7 +34,6 @@ class MDBase extends PDO {
             }
             catch(PDOException $e)
             {
-                die($e->getMessage());
                 header("Location: ../index.php?Error=1");
             }
         }

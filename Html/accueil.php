@@ -1,7 +1,5 @@
-<?php if(isset($_GET['Error'])) echo '<div class="control-label error">Mauvaise combinaison nom d\'utilisateur/mot de passe</div>'
-$EX = isset($_REQUEST['EX']) ? $_REQUEST['EX'] : 'home';
-if(!isset($_SESSION['USER'])){
-?>
+<?php if(isset($_GET['Error'])) echo '<div class="control-label error">Mauvaise combinaison nom d\'utilisateur/mot de passe</div>';
+      else if(isset($_SESSION['USER'])) echo 'Bienvenue '.$_SESSION['USER'];?>
 <form class="form-horizontal" id="formconnec" action="./Php/connection.php" method="post">
     <div class="control-group">
         <label class="control-label">Login</label>
@@ -18,6 +16,3 @@ if(!isset($_SESSION['USER'])){
 
     <button type="submit" class="btn btn-success">Connexion</button>
 </form>
-<?php }
-else{
-  echo 'Bienvenue '.$_SESSION['USER'];}

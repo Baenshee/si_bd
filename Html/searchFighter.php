@@ -11,14 +11,6 @@ $offset= ($nbPage-1)*$nbLines;
 $i=0;
 $pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
 
-$racesList = $pdo -> getAllRaces();
-foreach($racesList as $line){
-    $races[$i]['id']=$line['id'];
-    $races[$i]['name']=$line['name'];
-    $i++;
-}
-$i=0;
-
 ?>
 
 <div class="container">
@@ -132,15 +124,15 @@ $i=0;
                 }
                 $where = " WHERE ".implode($conditions,' AND ');
                 if(count($conditions) > 0) {
-                    foreach ($pdo->query('SELECT Count(*) As NUM FROM fighter'. $where) as $row) {
+                    foreach ($pdo->query('SELECT Count(*) As NUM FROM Fighter'. $where) as $row) {
                         $rowNumber= $row['NUM'];
                     }
-                    $sql = 'SELECT * FROM fighter'. $where .' LIMIT '.$nbLines.' OFFSET '.$offset;
+                    $sql = 'SELECT * FROM Fighter'. $where .' LIMIT '.$nbLines.' OFFSET '.$offset;
                 }else {
-                    foreach ($pdo->query('SELECT Count(*) As NUM FROM fighter') as $row) {
+                    foreach ($pdo->query('SELECT Count(*) As NUM FROM Fighter') as $row) {
                         $rowNumber= $row['NUM'];
                     }
-                    $sql = 'SELECT * FROM fighter order by serialNumber ASC LIMIT '.$nbLines.' OFFSET '.$offset;
+                    $sql = 'SELECT * FROM Fighter order by serialNumber ASC LIMIT '.$nbLines.' OFFSET '.$offset;
                 }
 
                 foreach ($pdo->query($sql) as $row) {
@@ -175,11 +167,11 @@ $i=0;
                 }
             }else {
 
-                foreach ($pdo->query('SELECT Count(*) As NUM FROM fighter') as $row) {
+                foreach ($pdo->query('SELECT Count(*) As NUM FROM Fighter') as $row) {
                     $rowNumber= $row['NUM'];
                 }
 
-                $sql = 'SELECT * FROM fighter order by serialNumber ASC LIMIT '.$nbLines.' OFFSET '.$offset;
+                $sql = 'SELECT * FROM Fighter order by serialNumber ASC LIMIT '.$nbLines.' OFFSET '.$offset;
 
                 if(count($sql) > 0) {
 

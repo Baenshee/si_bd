@@ -1,5 +1,4 @@
 <?php
-
 $nbLines=10;
 if(isset($_POST['LINES']))
   $nbLines=$_POST['LINES'];
@@ -11,13 +10,6 @@ $offset= ($nbPage-1)*$nbLines;
 
 $i=0;
 $pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
-$familiesList = $pdo -> getAllItem_families();
-foreach($familiesList as $line){
-    $families[$i]['id']=$line['id'];
-    $families[$i]['name']=$line['name'];
-    $i++;
-}
-$i=0;
 
 ?>
 
@@ -66,7 +58,7 @@ $i=0;
         </div>
     </div>
     <div class="control-group">
-            <label class="control-label">Nombre de résultats à afficher</label>
+            <label class="control-label">Nombre de resultats a afficher</label>
             <div class="controls">
                 <select class="controls" name="LINES" type="text">
                       <option value ='5' <?php if($nbLines == '5'){echo("selected");}?>>5</option>

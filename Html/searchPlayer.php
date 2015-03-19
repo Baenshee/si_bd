@@ -94,12 +94,12 @@
                     foreach ($pdo->query('SELECT Count(*) As NUM FROM PLAYER'. $where) as $row) {
                         $rowNumber= $row['NUM'];
                     }
-                    $sql = 'SELECT * FROM PLAYER'. $where .' LIMIT '.$nbLines.' OFFSET '.$offset;
+                    $sql = 'SELECT * FROM Player'. $where .' LIMIT '.$nbLines.' OFFSET '.$offset;
                 }else {
                     foreach ($pdo->query('SELECT Count(*) As NUM FROM PLAYER') as $row) {
                         $rowNumber= $row['NUM'];
                     }
-                    $sql = 'SELECT * FROM PLAYER order by PSEUDO ASC LIMIT '.$nbLines.' OFFSET '.$offset;
+                    $sql = 'SELECT * FROM Player order by PSEUDO ASC LIMIT '.$nbLines.' OFFSET '.$offset;
                 }
 
                 foreach ($pdo->query($sql) as $row) {
@@ -115,10 +115,10 @@
                 }
             }else {
 
-                foreach ($pdo->query('SELECT Count(*) As NUM FROM player') as $row) {
+                foreach ($pdo->query('SELECT Count(*) As NUM FROM Player') as $row) {
                     $rowNumber= $row['NUM'];
                 }
-                $sql = 'SELECT * FROM player order by pseudo ASC LIMIT '.$nbLines.' OFFSET '.$offset;
+                $sql = 'SELECT * FROM Player order by pseudo ASC LIMIT '.$nbLines.' OFFSET '.$offset;
                 if(count($sql) > 0) {
 
                     foreach ($pdo->query($sql) as $row) {

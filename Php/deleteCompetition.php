@@ -1,6 +1,7 @@
 <?php
 require_once('../Model/MDBase.mod.php');
 $id = 0;
+  if (!isset($_SESSION)) { session_start(); }
 if ( !empty($_POST)) {
     // keep track post values
     $id = $_POST['id'];

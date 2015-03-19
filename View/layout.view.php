@@ -20,4 +20,6 @@ $vHtml = new VHtml();
         <?php $vpage->$page['method']($page['arg']) ?>
     </div>
   </div>
+  <script src="../Js/tri.js"></script>
 </body>
+</html>
