@@ -12,7 +12,7 @@ class MFighter {
     private $description;
     private $price;
     function __construct ($id) {
-        $this->sql = new MDBase();
+        $this->sql = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
         if (is_int($id+0))
         {
             $state = $this->sql->prepare("SELECT * FROM fighter WHERE id = :id;");

@@ -2,10 +2,7 @@
     <div class="row">
         <h3>Administration des tables</h3>
     </div>
-
     <div class="row">
-
-
         <table class="table table-striped table-bordered">
             <thead>
             <tr>
@@ -16,7 +13,7 @@
             </thead>
             <tbody>
             <?php
-            $pdo= new MDBase();
+            $pdo= new MDBase($_SESSION['USER'],$_SESSION['PASS']);
             if(isset($_GET['tab'])){
               $sql='Repair Table '.$_GET['tab'];
               foreach($pdo->query($sql) as $row){
@@ -38,7 +35,7 @@
                         echo '<tr>';
                         echo '<td>'. $row['Table'] . '</td>';
                         echo '<td>'. $row['Msg_type'] . '</td>';
-                        $str= ($row['Msg_text']!='OK') ? $row['Msg_text'].'</td>': '<a href=index.php?EX=admin&tab='.$row['Table'].'>'.$row['Msg_text'].'</a>';
+                        $str= ($row['Msg_text']=='OK') ? $row['Msg_text'].'</td>': '<a href=index.php?EX=admin&tab='.$row['Table'].'>'.$row['Msg_text'].'</a>';
                         echo '<td>'. $str;
                         echo '</tr>';
                     }

@@ -1,6 +1,6 @@
 <?php
 
-    $pdo = new MDBase();
+    $pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
     if(isset($_POST['NAME'])) {
         $name = $_POST['NAME'];
         $lvl = $_POST['LEVEL'];

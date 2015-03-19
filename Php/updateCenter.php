@@ -9,7 +9,7 @@
         $price = $_POST['PRICE'];
         $description = $_POST['DESCRIPTION'];
         // update data
-        $pdo = new MDBase();
+    		$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $sql = "UPDATE center  set name = ?, capacity =?, price = ?, description = ? WHERE id = ?";
         $q = $pdo->prepare($sql);

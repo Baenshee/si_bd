@@ -1,6 +1,6 @@
 <?php
 
-$pdo = new MDBase();
+$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
 
 if(isset($_POST['NAME'])) {
     $name = $_POST['NAME'];
@@ -17,13 +17,6 @@ if(isset($_POST['NAME'])) {
     header("./index.php?EX=searchCompetition");
 }
 
-$i=0;
-/*$familiesList = $pdo -> getAllFacilities_families();
-foreach($familiesList as $line){
-    $families[$i]['ID']=$line['ID'];
-    $families[$i]['NAME']=$line['NAME'];
-    $i++;
-}*/
 $i=0;
 
 ?>

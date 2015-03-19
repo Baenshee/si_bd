@@ -11,7 +11,7 @@
         $lethality = $_POST['LETHALITY'];
         $description = $_POST['DESCRIPTION'];
         // update data
-        $pdo = new MDBase();
+    		$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $sql = "UPDATE competition  set name = ?, startingDate = ?, endingDate = ?, capacity =?, lethality = ?, description = ? WHERE id = ?";
         $q = $pdo->prepare($sql);

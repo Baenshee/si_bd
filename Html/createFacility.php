@@ -1,7 +1,6 @@
 <?php
 
-$pdo = new MDBase();
-
+$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
 if(isset($_POST['NAME'])) {
     $name = $_POST['NAME'];
     $itemCapacity = $_POST['ITEMCAPACITY'];
@@ -17,14 +16,6 @@ if(isset($_POST['NAME'])) {
     $id= $pdo->lastInsertId();
     header("./index.php?EX=searchFacility");
 }
-
-$i=0;
-/*$familiesList = $pdo -> getAllFacilities_families();
-foreach($familiesList as $line){
-    $families[$i]['id']=$line['id'];
-    $families[$i]['name']=$line['name'];
-    $i++;
-}*/
 $i=0;
 
 ?>
@@ -48,19 +39,6 @@ $i=0;
                 <div class="controls">
                     <input name="LEVEL" id="level" type="text"  placeholder="Niveau" value="">
                 </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label">Famille</label>
-                </br>
-                <select class="controls" name="FAMILY" type="text">
-                    <?php
-                    echo('<option></option>');
-                    /*foreach ($families as $key => $fams) {
-                        echo('<option value ='.$fams['id'].'>'.$fams['name'].'</option>');
-                    }*/
-                    ?>
-                </select>
             </div>
 
             <div class="control-group">

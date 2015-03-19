@@ -24,45 +24,52 @@ session_start();
   <?php
   header ('Content-Type: text/html; charset=utf-8');
   require('Inc/require.inc.php');
+  if (!isset($_SESSION)) { session_start(); }
   //require('Inc/globals.inc.php');
   $EX = isset($_REQUEST['EX']) ? $_REQUEST['EX'] : 'home';
-  switch($EX)
-  {
-      case 'home'      : home();       break;
-      case 'searchFacility'      : searchFacility();       break;
-      case 'createFacility'      : createFacility();       break;
-      case 'deleteFacility'      : deleteFacility();       break;
-      case 'updateAFacility'      : updateAFacility();       break;
-      case 'updateFacility'      : updateFacility();       break;
-      case 'searchFighter'      : searchFighter();       break;
-      case 'createFighter'      : createFighter();       break;
-      case 'deleteFighter'      : deleteFighter();       break;
-      case 'updateAFighter'      : updateAFighter();       break;
-      case 'updateFighter'      : updateFighter();       break;
-      case 'searchItem'      : searchItem();       break;
-      case 'createItem'      : createItem();       break;
-      case 'deleteItem'      : deleteItem();       break;
-      case 'updateAnItem'      : updateAnItem();       break;
-      case 'updateItem'      : updateItem();       break;
-      case 'searchPlayer'      : searchPlayer();       break;
-      case 'deletePlayer'      : deletePlayer();       break;
-      case 'searchCenter'      : searchCenter();       break;
-      case 'createCenter'      : createCenter();       break;
-      case 'deleteCenter'      : deleteCenter();       break;
-      case 'updateACenter'      : updateACenter();       break;
-      case 'updateCenter'      : updateCenter();       break;
-      case 'searchClub'      : searchClub();       break;
-      case 'createClub'      : createClub();       break;
-      case 'deleteClub'      : deleteClub();       break;
-      case 'updateAClub'      : updateAClub();       break;
-      case 'updateClub'      : updateClub();       break;
-      case 'searchCompetition'      : searchCompetition();       break;
-      case 'createCompetition'      : createCompetition();       break;
-      case 'deleteCompetition'      : deleteCompetition();       break;
-      case 'updateACompetition'      : updateACompetition();       break;
-      case 'updateCompetition'      : updateCompetition();       break;
-      case 'admin'      : admin();       break;
-      default : home();
+  if(!isset($_SESSION['USER'])){
+    home();
+  }
+  else{
+    switch($EX)
+      {
+        case 'home'      : home();       break;
+        case 'searchFacility'      : searchFacility();       break;
+        case 'createFacility'      : createFacility();       break;
+        case 'deleteFacility'      : deleteFacility();       break;
+        case 'updateAFacility'      : updateAFacility();       break;
+        case 'updateFacility'      : updateFacility();       break;
+        case 'searchFighter'      : searchFighter();       break;
+        case 'createFighter'      : createFighter();       break;
+        case 'deleteFighter'      : deleteFighter();       break;
+        case 'updateAFighter'      : updateAFighter();       break;
+        case 'updateFighter'      : updateFighter();       break;
+        case 'searchItem'      : searchItem();       break;
+        case 'createItem'      : createItem();       break;
+        case 'deleteItem'      : deleteItem();       break;
+        case 'updateAnItem'      : updateAnItem();       break;
+        case 'updateItem'      : updateItem();       break;
+        case 'searchPlayer'      : searchPlayer();       break;
+        case 'deletePlayer'      : deletePlayer();       break;
+        case 'searchCenter'      : searchCenter();       break;
+        case 'createCenter'      : createCenter();       break;
+        case 'deleteCenter'      : deleteCenter();       break;
+        case 'updateACenter'      : updateACenter();       break;
+        case 'updateCenter'      : updateCenter();       break;
+        case 'searchClub'      : searchClub();       break;
+        case 'createClub'      : createClub();       break;
+        case 'deleteClub'      : deleteClub();       break;
+        case 'updateAClub'      : updateAClub();       break;
+        case 'updateClub'      : updateClub();       break;
+        case 'searchCompetition'      : searchCompetition();       break;
+        case 'createCompetition'      : createCompetition();       break;
+        case 'deleteCompetition'      : deleteCompetition();       break;
+        case 'updateACompetition'      : updateACompetition();       break;
+        case 'updateCompetition'      : updateCompetition();       break;
+        case 'deconnection'      : deconnection();       break;
+        case 'admin'      : admin();       break;
+        default : home();
+      }
   }
   require('./View/layout.view.php');
   function home()
@@ -346,5 +353,15 @@ session_start();
       $page['class'] = 'VHtml';
       $page['method'] = 'showHtml';
       $page['arg'] = './Html/admin.php';
+  }
+  function deconnection()
+  {
+    global $page;
+    unset($_SESSION['USER']);
+    session_destroy();
+    $page['title'] = 'Retour après déco';
+    $page['class'] = 'VHtml';
+    $page['method'] = 'showHtml';
+    $page['arg'] = 'Html/accueil.php';
   }
   ?>

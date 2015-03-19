@@ -11,7 +11,7 @@
         $id_itemFamily = $_POST['FAMILY'];
         $description = $_POST['DESCRIPTION'];
         // update data
-        $pdo = new MDBase();
+    		$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $sql = "UPDATE items  set name = ?, level = ?, price = ?, potency =?, id_itemFamily = ?, description = ? WHERE id = ?";
         $q = $pdo->prepare($sql);

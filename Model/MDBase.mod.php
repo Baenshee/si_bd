@@ -11,10 +11,10 @@ class MDBase extends PDO {
     private $dbUserPassword;
     private $cont  = null;
 //*/
-    public function __construct(){
+    public function __construct($user, $pass){
         $dns = $this->engine.':dbname='.$this->dbName.";host=".$this->dbHost;
-        $this->dbUsername='root';
-        $this->dbUserPassword= '';
+        $this->dbUsername=$user;
+        $this->dbUserPassword= $pass;
         try{
           parent::__construct( $dns, $this->dbUsername, $this->dbUserPassword );
         }

@@ -11,7 +11,7 @@
         $fighterCapacity = $_POST['FIGHTERCAPACITY'];
         $description = $_POST['DESCRIPTION'];
         // update data
-        $pdo = new MDBase();
+    		$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $sql = "UPDATE facility set name = ?, level = ?, price = ?, itemCapacity =?, fighterCapacity = ?, description = ? WHERE id = ?";
         $q = $pdo->prepare($sql);

@@ -6,7 +6,7 @@ if ( !empty($_POST)) {
     $id = $_POST['id'];
 
     // delete data
-    $pdo = new MDBase();
+    $pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $sql = "DELETE FROM player WHERE id = :id";
     $q = $pdo->prepare($sql);

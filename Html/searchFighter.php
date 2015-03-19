@@ -9,7 +9,7 @@ if(isset($_GET['PAGE']))
 $offset= ($nbPage-1)*$nbLines;
 
 $i=0;
-$pdo = new MDBase();
+$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
 
 $racesList = $pdo -> getAllRaces();
 foreach($racesList as $line){
@@ -70,7 +70,7 @@ $i=0;
                 </select>
 
             </div>
-    </div>  
+    </div>
         <div class="form-actions">
             </br>
             </br>
@@ -173,7 +173,7 @@ $i=0;
                     echo '</td>';
                     echo '</tr>';
                 }
-            }else {                
+            }else {
 
                 foreach ($pdo->query('SELECT Count(*) As NUM FROM fighter') as $row) {
                     $rowNumber= $row['NUM'];
@@ -227,22 +227,22 @@ $i=0;
                     $numberPages= ceil($rowNumber/$nbLines);
                     if($numberPages!=0){
 
-                        if($nbPage>3){                
-                            echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE=1">1</button>';   
-                        }      
+                        if($nbPage>3){
+                            echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE=1">1</button>';
+                        }
                         if($nbPage!=1){
                             echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE='.($nbPage-1).'">'.($nbPage-1).'</button>';
-                        } 
-                        echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE='.$nbPage.'">'.$nbPage.'</button>';  
+                        }
+                        echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE='.$nbPage.'">'.$nbPage.'</button>';
                         if($nbPage!=$numberPages){
                             echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE='.($nbPage+1).'">'.($nbPage+1).'</button>';
-                        }            
+                        }
                         if($nbPage<($numberPages-2)){
                             echo '<button type="submit" class="changePageButton" form="searchItem" formaction="./index.php?EX=searchItem&PAGE='.$numberPages.'">'.$numberPages.'</button>';
                         }
 
                     }
-            
+
                 ?>
         </div>
     </div>

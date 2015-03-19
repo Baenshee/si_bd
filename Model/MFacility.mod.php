@@ -9,7 +9,7 @@ class MFacility {
     private $price;
     private $description;
     function __construct ($id) {
-        $this->sql = new MDBase();
+        $this->sql = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
         if (is_int($id+0))
         {
             $state = $this->sql->prepare("SELECT * FROM facility WHERE id = :id;");

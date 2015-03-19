@@ -11,7 +11,7 @@ class MItem {
     private $id_itemFamily;
     private $description;
     function __construct ($id) {
-        $this->sql = new MDBase();
+        $this->sql = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
         if (is_int($id+0))
         {
             $state = $this->sql->prepare("SELECT * FROM items WHERE id = :id;");

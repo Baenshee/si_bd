@@ -72,7 +72,7 @@
             </thead>
             <tbody>
             <?php
-            $pdo = new MDBase();
+            $pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
             if(isset($_POST['PSEUDO'])) {
                 $nom = $_POST['PSEUDO'];
                 $conditions = array();
@@ -101,7 +101,7 @@
                     }
                     $sql = 'SELECT * FROM PLAYER order by PSEUDO ASC LIMIT '.$nbLines.' OFFSET '.$offset;
                 }
-                
+
                 foreach ($pdo->query($sql) as $row) {
                     echo '<tr>';
                     echo '<td>'. $row['pseudo'] . '</td>';
@@ -145,21 +145,21 @@
             <?php
                 $numberPages= ceil($rowNumber/$nbLines);
                 if($numberPages!=0){
-                    if($nbPage>3){                
-                        echo '<button type="submit" class="changePageButton" form="searchPlayer" formaction="./index.php?EX=searchPlayer&PAGE=1">1</button>';   
-                    }      
+                    if($nbPage>3){
+                        echo '<button type="submit" class="changePageButton" form="searchPlayer" formaction="./index.php?EX=searchPlayer&PAGE=1">1</button>';
+                    }
                     if($nbPage!=1){
                         echo '<button type="submit" class="changePageButton" form="searchPlayer" formaction="./index.php?EX=searchPlayer&PAGE='.($nbPage-1).'">'.($nbPage-1).'</button>';
-                    } 
-                    echo '<button type="submit" class="changePageButton" form="searchPlayer" formaction="./index.php?EX=searchPlayer&PAGE='.$nbPage.'">'.$nbPage.'</button>';  
+                    }
+                    echo '<button type="submit" class="changePageButton" form="searchPlayer" formaction="./index.php?EX=searchPlayer&PAGE='.$nbPage.'">'.$nbPage.'</button>';
                     if($nbPage!=$numberPages){
                         echo '<button type="submit" class="changePageButton" form="searchPlayer" formaction="./index.php?EX=searchPlayer&PAGE='.($nbPage+1).'">'.($nbPage+1).'</button>';
-                    }            
+                    }
                     if($nbPage<($numberPages-2)){
                         echo '<button type="submit" class="changePageButton" form="searchPlayer" formaction="./index.php?EX=searchPlayer&PAGE='.$numberPages.'">'.$numberPages.'</button>';
                     }
                 }
-            
+
             ?>
             </div>
         </div>

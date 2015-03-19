@@ -48,7 +48,7 @@ $offset= ($nbPage-1)*$nbLines;
                 </select>
 
             </div>
-        </div>  
+        </div>
         <div class="form-actions">
             </br>
             </br>
@@ -72,7 +72,7 @@ $offset= ($nbPage-1)*$nbLines;
             </thead>
             <tbody>
             <?php
-            $pdo = new MDBase();
+            $pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
             if(isset($_POST['NAME'])) {
                 $nom = $_POST['NAME'];
                 $conditions = array();
@@ -120,7 +120,7 @@ $offset= ($nbPage-1)*$nbLines;
 
                 foreach ($pdo->query('SELECT Count(*) As NUM FROM competition') as $row) {
                     $rowNumber= $row['NUM'];
-                }   
+                }
 
                 $sql = 'SELECT * FROM competition order by name ASC LIMIT '.$nbLines.' OFFSET '.$offset;
 
@@ -154,24 +154,24 @@ $offset= ($nbPage-1)*$nbLines;
                 $numberPages= ceil($rowNumber/$nbLines);
                 if($numberPages!=0){
 
-                    if($nbPage>3){                
-                        echo '<button type="submit" class="changePageButton" form="searchCompetition" formaction="./index.php?EX=searchCompetition&PAGE=1">1</button>';   
-                    }      
+                    if($nbPage>3){
+                        echo '<button type="submit" class="changePageButton" form="searchCompetition" formaction="./index.php?EX=searchCompetition&PAGE=1">1</button>';
+                    }
                     if($nbPage!=1){
                         echo '<button type="submit" class="changePageButton" form="searchCompetition" formaction="./index.php?EX=searchCompetition&PAGE='.($nbPage-1).'">'.($nbPage-1).'</button>';
-                    } 
-                    echo '<button type="submit" class="changePageButton" form="searchCompetition" formaction="./index.php?EX=searchCompetition&PAGE='.$nbPage.'">'.$nbPage.'</button>';  
+                    }
+                    echo '<button type="submit" class="changePageButton" form="searchCompetition" formaction="./index.php?EX=searchCompetition&PAGE='.$nbPage.'">'.$nbPage.'</button>';
                     if($nbPage!=$numberPages){
                         echo '<button type="submit" class="changePageButton" form="searchCompetition" formaction="./index.php?EX=searchCompetition&PAGE='.($nbPage+1).'">'.($nbPage+1).'</button>';
-                    }            
+                    }
                     if($nbPage<($numberPages-2)){
                         echo '<button type="submit" class="changePageButton" form="searchCompetition" formaction="./index.php?EX=searchCompetition&PAGE='.$numberPages.'">'.$numberPages.'</button>';
                     }
 
                 }
-            
+
             ?>
             </div>
-        </div>              
+        </div>
     </div>
 </div> <!-- /container -->

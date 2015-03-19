@@ -9,7 +9,7 @@ if(isset($_GET['PAGE']))
 $offset= ($nbPage-1)*$nbLines;
 
 $i=0;
-$pdo = new MDBase();
+$pdo = new MDBase($_SESSION['USER'],$_SESSION['PASS']);
 /*$familiesList = $pdo -> getAllFacilities_families();
 foreach($familiesList as $line){
     $families[$i]['id']=$line['id'];
@@ -65,7 +65,7 @@ $i=0;*/
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label">Famille</label>   
+            <label class="control-label">Famille</label>
             </br>
             <select class="controls" name="FAMILY" type="text">
                 <?php
@@ -107,7 +107,7 @@ $i=0;*/
                 </select>
 
             </div>
-        </div>  
+        </div>
         <div class="form-actions">
             </br>
             </br>
@@ -230,22 +230,22 @@ $i=0;*/
                     $numberPages= ceil($rowNumber/$nbLines);
                     if($numberPages!=0){
 
-                        if($nbPage>3){                
-                            echo '<button type="submit" class="changePageButton" form="searchFacility" formaction="./index.php?EX=searchFacility&PAGE=1">1</button>';   
-                        }      
+                        if($nbPage>3){
+                            echo '<button type="submit" class="changePageButton" form="searchFacility" formaction="./index.php?EX=searchFacility&PAGE=1">1</button>';
+                        }
                         if($nbPage!=1){
                             echo '<button type="submit" class="changePageButton" form="searchFacility" formaction="./index.php?EX=searchFacility&PAGE='.($nbPage-1).'">'.($nbPage-1).'</button>';
-                        } 
-                        echo '<button type="submit" class="changePageButton" form="searchFacility" formaction="./index.php?EX=searchFacility&PAGE='.$nbPage.'">'.$nbPage.'</button>';  
+                        }
+                        echo '<button type="submit" class="changePageButton" form="searchFacility" formaction="./index.php?EX=searchFacility&PAGE='.$nbPage.'">'.$nbPage.'</button>';
                         if($nbPage!=$numberPages){
                             echo '<button type="submit" class="changePageButton" form="searchFacility" formaction="./index.php?EX=searchFacility&PAGE='.($nbPage+1).'">'.($nbPage+1).'</button>';
-                        }            
+                        }
                         if($nbPage<($numberPages-2)){
                             echo '<button type="submit" class="changePageButton" form="searchFacility" formaction="./index.php?EX=searchFacility&PAGE='.$numberPages.'">'.$numberPages.'</button>';
                         }
 
                     }
-            
+
                 ?>
             </div>
         </div>
