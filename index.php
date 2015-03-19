@@ -66,6 +66,11 @@ session_start();
         case 'deleteCompetition'      : deleteCompetition();       break;
         case 'updateACompetition'      : updateACompetition();       break;
         case 'updateCompetition'      : updateCompetition();       break;
+        case 'searchNews'      : searchNews();       break;
+        case 'createNews'      : createNews();       break;
+        case 'deleteNews'      : deleteNews();       break;
+        case 'updateANews'      : updateANews();       break;
+        case 'updateNews'      : updateNews();       break;
         case 'deconnection'      : deconnection();       break;
         case 'admin'      : admin();       break;
         default : home();
@@ -343,6 +348,48 @@ session_start();
       $page['class'] = 'VHtml';
       $page['method'] = 'showHtml';
       $page['arg'] = './Html/updateCompetition.php';
+  }
+
+
+  function searchNews()
+  {
+      global $page;
+      $page['title'] = 'Recherche d\'un article';
+      $page['class'] = 'VHtml';
+      $page['method'] = 'showHtml';
+      $page['arg'] = './Html/searchNews.php';
+  }
+  function createNews()
+  {
+      global $page;
+      $page['title'] = 'Creation d\'un article';
+      $page['class'] = 'VHtml';
+      $page['method'] = 'showHtml';
+      $page['arg'] = './Html/createNews.php';
+  }
+  function deleteNews()
+  {
+      global $page;
+      $page['title'] = 'Supression d\'un article';
+      $page['class'] = 'VHtml';
+      $page['method'] = 'showHtml';
+      $page['arg'] = './Html/deleteNews.php';
+  }
+  function updateANews()
+  {
+      global $page;
+      $page['title'] = 'Edition d\'un article';
+      $page['class'] = 'VHtml';
+      $page['method'] = 'showHtml';
+      $page['arg'] = './Php/updateNews.php';
+  }
+  function updateNews()
+  {
+      global $page;
+      $page['title'] = 'Edition d\'un article';
+      $page['class'] = 'VHtml';
+      $page['method'] = 'showHtml';
+      $page['arg'] = './Html/updateNews.php';
   }
 
 
